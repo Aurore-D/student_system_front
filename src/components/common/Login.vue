@@ -129,7 +129,7 @@
     bottom: 0;
     left: 0;
     overflow: hidden;
-    background-color: rgba(38, 50, 56, .6);
+    /*background-color: rgba(38, 50, 56, .6);*/
     background: url(../../assets/bg.png) no-repeat;
     background-size: 100% 100%;
   }

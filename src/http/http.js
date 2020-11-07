@@ -6,6 +6,8 @@ import * as admin_dept_list  from "./modules/admin_dept_list.js";
 import * as admin_manager_list from "./modules/admin_manager_list";
 import * as admin_teacher_list from "./modules/admin_teacher_list";
 import * as admin_userlogin_list from "./modules/admin_userlogin_list";
+import * as manager from "./modules/manager"
+import * as admin_student from "./modules/admin_student"
 
 export default {
 	login,
@@ -15,5 +17,7 @@ export default {
   admin_dept_list,
   admin_manager_list,
   admin_teacher_list,
-  admin_userlogin_list
+  admin_userlogin_list,
+  manager,
+  admin_student
 }

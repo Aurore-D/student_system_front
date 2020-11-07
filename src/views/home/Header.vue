@@ -25,7 +25,7 @@
         <el-submenu :title="title.userSetUp" index="3">
           <template slot="title">
 						<span class="header-span">
-							<img src="~@/assets/logo01.jpg" :alt="userName"> {{ title.userName }}
+							<img src="~@/assets/logo01.jpg" :alt="userName" style="border-radius: 20px"> {{ title.userName }}
 						</span>
           </template>
           <el-menu-item index="3-1" @click="showPasswordBox">
@@ -120,7 +120,9 @@
             open_about() {
                 this.$alert(
                     '<div style="margin-left: 20px">' +
-                    '蔡保标 刘凯 王玥 夏博阳<br>感谢以上人员的支持（排名不分前后）' +
+                    '蔡保标：教师和经理系统评价及密码修改模块 <br>刘凯：管理员系统学生信息模块 <br> ' +
+                    '夏博阳：管理员系统其他模块<br>王玥：登录模块，前端布局导航菜单及项目整合<br>' +
+                    '感谢所有人的付出（排名不分前后）' +
                     '</div>',
                     '关于作者',
                     {
@@ -150,7 +152,7 @@
     display: flex;
     height: 50px;
     line-height: 50px;
-    background: url('../../assets/bg01.jpg') 270px;
+    background: url('../../assets/bg-header.png') no-repeat;
 
   }
 
@@ -181,6 +183,7 @@
     color: rgba(64, 64, 64, 0.47);
     font-weight: lighter;
     font-size: 14px;
+
   }
 
   .header-submenu-a:hover {
@@ -192,6 +195,10 @@
   .el-menu--horizontal > .el-submenu .el-submenu__title {
     height: 50px !important;
     line-height: 50px !important;
+  }
+  .el-submenu{
+    /*background-color: #F1F4F5;*/
+
   }
 
   .el-menu--collapse .el-menu .el-submenu,
@@ -209,6 +216,7 @@
 
   .header-span {
     font-size: 20px;
+
   }
 
 
