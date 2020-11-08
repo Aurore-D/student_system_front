@@ -38,7 +38,7 @@
                           class="avatar-uploader"
                           action="http://localhost:8081/upload"
                           :show-file-list="false"
-                          :on-change="handleAvatarChange"
+                          :on-success="handleAvatarChange"
                           :before-upload="beforeAvatarUpload"
                         >
                           <img v-if="form.img_path" :src="form.img_path" class="avatar">
@@ -141,7 +141,7 @@
             </el-form>
           </el-dialog>
 
-          <el-dialog title="学生信息修改" :visible.sync="editDialogVisible" width="70%">
+          <el-dialog title="学生信息修改" :visible.sync="editDialogVisible" width="70%"  :append-to-body='true' >
             <el-form :model="editForm" :rules="rules" ref="editForm" label-width="10px" class="demo-ruleForm">
 
               <table>
@@ -167,7 +167,7 @@
                           class="avatar-uploader"
                           action="http://localhost:8081/upload"
                           :show-file-list="false"
-                          :on-change="handleeditAvatarChange"
+                          :on-success="handleeditAvatarChange"
                           :before-upload="beforeeditAvatarUpload"
                         >
                           <img v-if="editForm.imgPath" :src="editForm.imgPath" class="avatar">
@@ -517,6 +517,7 @@
                     remark: '',
                     phone: '',
                     img_path: '',
+                    imgPath:'',
                     class: []
                 }
                 ,
@@ -538,6 +539,7 @@
                     remark: '',
                     img_path: '',
                     imgPath:'',
+                    img_path_new:'',
                     class: [],
                     dept: []
                 }
@@ -696,8 +698,13 @@
                 this.addDialogVisible = true
 
             },
-            handleAvatarChange(file) {
+            handleAvatarChange(res,file) {
+                //回显
                 this.form.img_path = URL.createObjectURL(file.raw);
+                //传值
+                this.form.imgPath=res;
+
+
             },
             beforeAvatarUpload(file) {
                 //在头像上传之前需要做的判断，如判断文件格式
@@ -743,11 +750,14 @@
                             class_no= this.form.class_no,
                             phone= this.form.phone,
                             native_place= this.form.native_place,
-                            img_path= this.form.img_path,
+                            img_path= this.form.imgPath,
                             remark= this.form.remark;
+                        console.log("img_path--")
+                        console.log(img_path)
                         http.admin_student.addStudents(student_name, folk,sex,marital_status, id_number,
                             graduate_school,birthday,major,class_no, phone,
                             native_place,img_path,remark).then(res => {
+
                             if (res.data == true) {
                                 this.$message({
                                     message: '添加成功',
@@ -824,8 +834,14 @@
                 /*this.editForm.imgPath = "";*/
             },
 
-            handleeditAvatarChange(file) {
+            handleeditAvatarChange(res,file) {
+                //回显
                 this.editForm.imgPath = URL.createObjectURL(file.raw);
+                console.log(this.editForm.imgPath)
+
+                //传值
+                this.editForm.img_path_new=res;
+
             },
 
             beforeeditAvatarUpload(file) {
@@ -876,10 +892,12 @@
                             major= this.editForm.major,
                             class_no= this.editForm.class_no,
                             native_place= this.editForm.native_place,
-                            img_path= this.editForm.imgPath,
+                            img_path= this.editForm.img_path_new,
                             phone=this.editForm.phone,
                             dept_name= this.editForm.dept_name,
                             remark= this.editForm.remark;
+                        console.log("我的图片地址：")
+                        console.log(img_path)
                         http.admin_student.editStudent(student_id,student_name,folk,sex,marital_status,
                             id_number,graduate_school,birthday,major,class_no,
                             native_place, img_path,phone,dept_name, remark).then(res => {
@@ -907,6 +925,7 @@
                     }
                 });
             },
+
             handleDelete(index, row) {
                 console.log(index, row);
                 this.delVisible = true;
@@ -938,7 +957,7 @@
             }
         },
 
-        mounted() {
+        created() {
             this.getStudentListByPage();
             this.getStudentList();
             this.getAllClass_no();
