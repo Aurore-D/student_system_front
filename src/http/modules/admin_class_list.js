@@ -82,10 +82,10 @@ export function deleteClass(classNo) {
             classNo: _class.class_no
           }
         })*/
-export function getClassByNo(classNo) {
+export function getClassById(classNo) {
   return http(
     {
-      url: '/getClassByNo',
+      url: '/getClassById',
       method: 'get',
       params:{
         classNo: classNo

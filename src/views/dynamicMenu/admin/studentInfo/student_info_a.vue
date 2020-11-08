@@ -36,7 +36,7 @@
                       <div style="margin-left: 20px; margin-top: -78px">
                         <el-upload
                           class="avatar-uploader"
-                          :action="uploadUrl()"
+                          action="http://localhost:8081/upload"
                           :show-file-list="false"
                           :on-change="handleAvatarChange"
                           :before-upload="beforeAvatarUpload"
@@ -165,7 +165,7 @@
                       <div style="margin-right: 22% ">
                         <el-upload
                           class="avatar-uploader"
-                          :action="uploadUrl()"
+                          action="http://localhost:8081/upload"
                           :show-file-list="false"
                           :on-change="handleeditAvatarChange"
                           :before-upload="beforeeditAvatarUpload"
@@ -615,9 +615,6 @@
             getImgPathForEdit(){
                 return require('@/assets/' + this.editForm.img_path) ;
             },
-            uploadUrl(){
-                return "http://localhost:8081/upload?token="+getToken();
-            },
             //  获取分页员工列表
             getStudentListByPage() {
                 /*axios.get('getStudentByPage', {
@@ -824,7 +821,7 @@
                 this.editForm.class_no = row.class_no;
                 this.editForm.dept_name = row.dept_name;
                 this.editForm.img_path = row.img_path;
-                this.editForm.imgPath = row.imgPath;
+                /*this.editForm.imgPath = "";*/
             },
 
             handleeditAvatarChange(file) {
@@ -879,7 +876,7 @@
                             major= this.editForm.major,
                             class_no= this.editForm.class_no,
                             native_place= this.editForm.native_place,
-                            img_path= this.editForm.img_path,
+                            img_path= this.editForm.imgPath,
                             phone=this.editForm.phone,
                             dept_name= this.editForm.dept_name,
                             remark= this.editForm.remark;

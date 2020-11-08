@@ -20,7 +20,7 @@
     <el-dialog title="修改班期信息" :visible.sync="updateClassForm.dialogFormVisible" width="30%">
       <el-form label-width="80px">
         <el-form-item label="班期号:">
-          <el-input  v-model="updateClassForm.class_no" style="width: 80%"></el-input>
+          <el-input  v-model="updateClassForm.class_no" style="width: 80%" readonly></el-input>
         </el-form-item>
         <el-form-item label="班级教师:">
           <el-select v-model="updateClassForm.teacher_id" style="width: 80%">
@@ -58,7 +58,7 @@
       <el-table-column
         label="操作" align="center" width="120">
         <template slot-scope="scope">
-          <el-button @click="getClassByNo(scope.row)" type="text" size="small">编辑</el-button>
+          <el-button @click="getClassById(scope.row)" type="text" size="small">编辑</el-button>
           <el-button type="text" size="small" @click="deleteClass(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -177,7 +177,7 @@
                     })
                 });
             },
-            getClassByNo: function (_class) {
+            getClassById: function (_class) {
                 this.updateClassForm.dialogFormVisible = true;
                 /* axios.get("getClassByNo", {
                    params: {
@@ -185,7 +185,7 @@
                    }
                  })*/
                 var classNo = _class.class_no;
-                http.admin_class_list.getClassByNo(classNo).then(res => {
+                http.admin_class_list.getClassById(classNo).then(res => {
                     this.updateClassForm.class_no = res.data.classNo;
                     this.updateClassForm.teacher_id = res.data.teacherId;
                 })

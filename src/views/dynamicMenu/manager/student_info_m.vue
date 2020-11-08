@@ -148,6 +148,7 @@
         name: "student_info_m",
         data() {
             return {
+                periodNo:1,
                 tableData: [],
                 tableColumnList: [],//动态表头
                 student_name: "",
@@ -200,7 +201,7 @@
                 })*/
                 var studentName = this.student_name,
                     managerId = this.$store.state.user.userId,
-                    periodNo = 1,//转正
+                    periodNo = this.periodNo,//转正
                     curPage = page,
                     pageSize = size;
                 http.manager.getAllStuWithManager(studentName, managerId, periodNo, curPage, pageSize).then(res => {
@@ -221,7 +222,7 @@
                     }
                 })*/
                 var studentId = student.student_id,
-                    periodNo = 1; //转正时期分数;
+                    periodNo = this.periodNo; //转正时期分数;
                 http.manager.getScoreByStudentIdWithManager(studentId, periodNo).then(res => {
                     this.editForm.qualityScore = res.data.qualityScoreWithStudent;
                 })
@@ -268,7 +269,7 @@
                     }
                 })*/
                 var studentId = student.student_id,
-                    periodNo = 1; //转正
+                    periodNo = this.periodNo; //转正
                 http.manager.getEvaluationWithManagerByStudentId(studentId, periodNo).then(res => {
                     this.evaluateForm = res.data
                 })
@@ -277,6 +278,7 @@
             handleUpdateEvaluate: function (formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+
                         /*axios.get("evaluatingStudentWithManager", {
                             params: {
                                 managerName: "刘表",
@@ -288,7 +290,7 @@
                         })*/
                         var managerName = this.$store.state.user.userId,
                             studentId = this.evaluateForm.studentId,
-                            periodNo = 1,//转正
+                            periodNo = this.periodNo,//转正
                             overallScore = this.evaluateForm.overallScore,
                             evaluationFormDept = this.evaluateForm.evaluationFormDept
                         http.manager.evaluatingStudentWithManager(managerName, studentId, periodNo, overallScore, evaluationFormDept).then(res => {
