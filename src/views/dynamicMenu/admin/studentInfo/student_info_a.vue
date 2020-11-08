@@ -36,7 +36,7 @@
                       <div style="margin-left: 20px; margin-top: -78px">
                         <el-upload
                           class="avatar-uploader"
-                          action="http://localhost:8081/upload"
+                          :action="uploadUrl()"
                           :show-file-list="false"
                           :on-change="handleAvatarChange"
                           :before-upload="beforeAvatarUpload"
@@ -159,13 +159,13 @@
                   <td rowspan="4">
                     <div style="margin-left: 20px; margin-top: -78px">
                       <div style="margin-top: 53%">
-                        <img v-if="editForm.img_path" :src="require('../'+editForm.img_path)" class="avatar">
+                        <img v-if="editForm.img_path" :src="getImgPathForEdit()" class="avatar">
                         <h5 style="margin-right:20%">原头像</h5>
                       </div>
                       <div style="margin-right: 22% ">
                         <el-upload
                           class="avatar-uploader"
-                          action="http://localhost:8081/upload"
+                          :action="uploadUrl()"
                           :show-file-list="false"
                           :on-change="handleeditAvatarChange"
                           :before-upload="beforeeditAvatarUpload"
@@ -310,7 +310,7 @@
                   <td>{{tablesex}}</td>
                   <td rowspan="4" colspan="1">
                     <div style="margin-top: -23%">
-                      <img v-if="tableimg_path" :src="require('../'+tableimg_path)" class="avatar">
+                      <img v-if="tableimg_path" :src="getImgPathForShow()" class="avatar">
                     </div>
                   </td>
                 </tr>
@@ -464,13 +464,14 @@
 
 
 <script>
-    import axios from 'axios'
     import http from '@/http/http.js'
+    import {getToken} from '@/http/auth.js'
 
     export default {
         name: "student_info_a",
         data() {
             return {
+
                 student_name: "",
                 class_no: "",
                 pageSize: 5,
@@ -536,6 +537,7 @@
                     native_place: '',
                     remark: '',
                     img_path: '',
+                    imgPath:'',
                     class: [],
                     dept: []
                 }
@@ -607,6 +609,15 @@
 
         },
         methods: {
+            getImgPathForShow(){
+                return require('@/assets/' + this.tableimg_path) ;
+            },
+            getImgPathForEdit(){
+                return require('@/assets/' + this.editForm.img_path) ;
+            },
+            uploadUrl(){
+                return "http://localhost:8081/upload?token="+getToken();
+            },
             //  获取分页员工列表
             getStudentListByPage() {
                 /*axios.get('getStudentByPage', {
@@ -939,7 +950,7 @@
     }
 </script>
 
-<style scoped>
+<style>
 
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
@@ -984,6 +995,9 @@
     /*background-image:url("../assets/images/bg2.jpg");*/
     background-size: 100% 100%;
     margin-top: -20px;
+  }
+  .el-table__fixed {
+    height: 100% !important;
   }
 
 </style>
