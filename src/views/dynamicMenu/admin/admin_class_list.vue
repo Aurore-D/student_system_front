@@ -45,7 +45,6 @@
       border
       style="width: 450px;margin-left:25%">
       <el-table-column
-        fixed
         prop="class_no" align="center"
         label="班期号"
         width="150">
@@ -75,92 +74,92 @@
 </template>
 
 <script>
-    import axios from 'axios';
-    import http from '@/http/http.js'
+  import axios from 'axios';
+  import http from '@/http/http.js'
 
-    export default {
-        name: "admin_class_list",
-        //数据
-        data() {
-            return {
-                //主页面的数据
-                class_list: {
-                    tableData: [],
-                    total: 0,
-                    page_size: 5,
-                    current_page: 1
-                },
-                //新增class的数据
-                addClassForm: {
-                    dialogFormVisible: false, //控制该表单是否显示
-                    class_no: '',
-                    teacher_id: '',
-                    teacher: [],
-                },
-                //修改class的数据
-                updateClassForm: {
-                    dialogFormVisible: false,
-                    class_no: 0,
-                    teacher_id: '',
-                    teacher: []
-                },
-            }
+  export default {
+    name: "admin_class_list",
+    //数据
+    data() {
+      return {
+        //主页面的数据
+        class_list: {
+          tableData: [],
+          total: 0,
+          page_size: 5,
+          current_page: 1
         },
-        //方法
-        methods: {
-            getAllClass: function () {
+        //新增class的数据
+        addClassForm: {
+          dialogFormVisible: false, //控制该表单是否显示
+          class_no: '',
+          teacher_id: '',
+          teacher: [],
+        },
+        //修改class的数据
+        updateClassForm: {
+          dialogFormVisible: false,
+          class_no: 0,
+          teacher_id: '',
+          teacher: []
+        },
+      }
+    },
+    //方法
+    methods: {
+      getAllClass: function () {
 
-                /*axios.get("getAllClass")*/
-                http.admin_class_list.getAllClass().then(res => {
-                    this.class_list.total = res.data.length;
-                })
-            },
-            getAllClassByPage: function () {
-                this.getAllClass();
+        /*axios.get("getAllClass")*/
+        http.admin_class_list.getAllClass().then(res => {
+          this.class_list.total = res.data.length;
+        })
+      },
+      getAllClassByPage: function () {
+        this.getAllClass();
 
-                /*axios.get("getAllClassByPage", {
-                  params: {
-                    pageSize: this.class_list.page_size,
-                    currentPage: this.class_list.current_page
-                  }
-                })*/
-                var pageSize = this.class_list.page_size,
-                    currentPage = this.class_list.current_page;
-                http.admin_class_list.getAllClassByPage(pageSize, currentPage).then(res => {
-                    this.class_list.tableData = res.data;
-                })
-            },
-            getAllTeacher_name: function () {
+        /*axios.get("getAllClassByPage", {
+          params: {
+            pageSize: this.class_list.page_size,
+            currentPage: this.class_list.current_page
+          }
+        })*/
+        var pageSize = this.class_list.page_size,
+          currentPage = this.class_list.current_page;
+        http.admin_class_list.getAllClassByPage(pageSize, currentPage).then(res => {
+          this.class_list.tableData = res.data;
+        })
+      },
+      getAllTeacher_name: function () {
 
-                /*axios.get("getAllTeacher_name")*/
+        /*axios.get("getAllTeacher_name")*/
 
-                http.admin_class_list.getAllTeacher_name().then(res => {
-                    this.addClassForm.teacher = res.data;
-                    this.updateClassForm.teacher = res.data;
-                })
-            },
-            addClass: function () {
-                this.addClassForm.dialogFormVisible = false;
-                /*axios.get("addClass", {
-                  params: {
-                    teacherId: this.addClassForm.teacher_id
-                  }
-                })*/
-                var teacherId = this.addClassForm.teacher_id;
-                http.admin_class_list.addClass(teacherId).then(res => {
-                    this.getAllClassByPage();
-                    this.$message({
-                        message: res.data,
-                        type: 'success'
-                    });
-                })
-            },
-            deleteClass: function (_class) {
-                this.$confirm('确定删除该班级信息?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
+        http.admin_class_list.getAllTeacher_name().then(res => {
+          this.addClassForm.teacher = res.data;
+          this.updateClassForm.teacher = res.data;
+        })
+      },
+      addClass: function () {
+        this.addClassForm.dialogFormVisible = false;
+        /*axios.get("addClass", {
+          params: {
+            teacherId: this.addClassForm.teacher_id
+          }
+        })*/
+        var teacherId = this.addClassForm.teacher_id;
+        http.admin_class_list.addClass(teacherId).then(res => {
+          this.getAllClassByPage();
+          this.$message({
+            message: res.data,
+            type: 'success'
+          });
+        })
+      },
+      deleteClass: function (_class) {
+        this.$confirm('确定删除该班级信息?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
 
                     /*axios.get("deleteClass", {
                       params: {
@@ -198,31 +197,31 @@
                 }).then(() => {
                     this.updateClassForm.dialogFormVisible = false;
 
-                    /* axios.get("updateClassByNo", {
-                       params: {
-                         classNo: this.updateClassForm.class_no,
-                         teacherId: this.updateClassForm.teacher_id
-                       }
-                     })*/
-                    var classNo = this.updateClassForm.class_no,
-                        teacherId = this.updateClassForm.teacher_id;
-                    http.admin_class_list.updateClassByNo(classNo, teacherId).then(res => {
-                        this.getAllClassByPage();
-                        this.$message({
-                            message: res.data,
-                            type: 'success'
-                        });
-                    })
-                });
-            },
-
-        },
-        //生命周期钩子
-        mounted() {  //编译后去获取数据
+          /* axios.get("updateClassByNo", {
+             params: {
+               classNo: this.updateClassForm.class_no,
+               teacherId: this.updateClassForm.teacher_id
+             }
+           })*/
+          var classNo = this.updateClassForm.class_no,
+            teacherId = this.updateClassForm.teacher_id;
+          http.admin_class_list.updateClassById(classNo, teacherId).then(res => {
             this.getAllClassByPage();
-            this.getAllTeacher_name();
-        }
+            this.$message({
+              message: res.data,
+              type: 'success'
+            });
+          })
+        });
+      },
+
+    },
+    //生命周期钩子
+    mounted() {  //编译后去获取数据
+      this.getAllClassByPage();
+      this.getAllTeacher_name();
     }
+  }
 </script>
 
 <style>

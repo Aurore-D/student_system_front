@@ -183,7 +183,7 @@
                 })
             },
             updateDeptById: function () {
-                this.$confirm('确定修改该部门经理信息?', '提示', {
+                this.$confirm('确定修改该部门信息?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

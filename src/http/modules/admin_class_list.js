@@ -99,10 +99,10 @@ export function getClassById(classNo) {
               teacherId: this.updateClassForm.teacher_id
             }
           })*/
-export function updateClassByNo(classNo,teacherId) {
+export function updateClassById(classNo,teacherId) {
   return http(
     {
-      url: '/updateClassByNo',
+      url: '/updateClassById',
       method: 'get',
       params:{
         classNo: classNo,
