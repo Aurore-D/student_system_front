@@ -32,7 +32,7 @@
         </el-table-column>
 
         <!--内嵌的成绩表格==动态获取表头-->
-        <el-table-column label="转正工作评价" align="center">
+        <el-table-column label="工作一年工作评价" align="center">
           <el-table-column :label="item.quality_name" :property="item.quality_name"
                            v-for="(item,index) in tableColumnList" :key="index" align="center">
           </el-table-column>
@@ -52,7 +52,7 @@
             prop="evaluation_form_dept"
             label="评价" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.evaluation_form_dept === ''">未评价</span>
+              <span v-if="scope.row.evaluation_form_dept  == null">未评价</span>
               <span v-else>{{scope.row.evaluation_form_dept}}</span>
             </template>
           </el-table-column>

@@ -61,7 +61,7 @@
             prop="evaluation_form_school"
             label="评价" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.evaluation_form_school === ''">未评价</span>
+              <span v-if="scope.row.evaluation_form_school == null">未评价</span>
               <span v-else>{{scope.row.evaluation_form_school}}</span>
             </template>
           </el-table-column>
@@ -234,13 +234,15 @@
                 this.EvaluateVisible = false;
             },
             /*更新成绩*/
-            handleUpdate: function () {
+            handleUpdate: function (editForm) {
                 /*axios({
                     method: 'post',
                     url: 'updateStuScoreWithTeacher',
                     data: this.editForm
                 })*/
                 var data = this.editForm.CourseScore;
+              this.$refs[editForm].validate((valid) => {
+                  if (valid) {
                 http.teacher.updateStuScoreWithTeacher(data).then(res => {
                     if ("success" == res.data) {
                         this.$message({
@@ -248,11 +250,15 @@
                             type: 'success'
                         });
                         this.getAllStu();
+                      this.editFormVisible = false;
                     } else {
                         this.$message.error('提交失败！');
                     }
                 })
-                this.editFormVisible = false;
+                  } else {
+                    return false;
+                  }
+              });
             },
             /*主页面评价按钮操作*/
             evaluate: function (student) {
@@ -269,7 +275,7 @@
                 })
             },
             /*评价提交按钮操作*/
-            handleUpdateEvaluate: function () {
+            handleUpdateEvaluate: function (evaluateForm) {
                 /*  axios.get("evaluatingStudentWithTeacher", {
                       params: {
                           teacherName: "刘备",
@@ -282,19 +288,25 @@
                     studentId = this.evaluateForm.studentId,
                     overallScore = this.evaluateForm.overallScore,
                     evaluationFormSchool = this.evaluateForm.evaluationFormSchool;
-                http.teacher.evaluatingStudentWithTeacher(teacherName, studentId, overallScore, evaluationFormSchool).then(res => {
+              this.$refs[evaluateForm].validate((valid) => {
+                if (valid) {
+                  http.teacher.evaluatingStudentWithTeacher(teacherName, studentId, overallScore, evaluationFormSchool).then(res => {
                     if ("success" == res.data) {
-                        this.$message({
-                            message: '提交成功！',
-                            type: 'success'
-                        });
-                        this.getAllStu();
-                        this.EvaluateVisible = false;
+                      this.$message({
+                        message: '提交成功！',
+                        type: 'success'
+                      });
+                      this.getAllStu();
+                      this.EvaluateVisible = false;
                     } else {
-                        this.$message.error('提交失败！');
+                      this.$message.error('提交失败！');
                     }
-                })
-            }
+                  })
+                } else {
+                  return false;
+                }
+              });
+              }
         },
         //生命周期钩子
         mounted() {//编译后去获取数据
