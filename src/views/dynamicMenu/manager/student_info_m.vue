@@ -52,7 +52,7 @@
             prop="evaluation_form_dept"
             label="评价" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.evaluation_form_dept === ''">未评价</span>
+              <span v-if="scope.row.evaluation_form_dept == null">未评价</span>
               <span v-else>{{scope.row.evaluation_form_dept}}</span>
             </template>
           </el-table-column>
