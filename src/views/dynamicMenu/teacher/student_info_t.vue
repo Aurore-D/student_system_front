@@ -130,8 +130,8 @@
               <td>{{studentData.student_id}}</td>
               <td>性别</td>
               <td>{{studentData.sex}}</td>
-              <td rowspan="4" colspan="1">
-                <div style="margin-top: -23%">
+              <td rowspan="3" colspan="1">
+                <div style="margin-top: -2%;margin-left: 9%">
                   <img v-if="studentData.img_path" :src="getImgPathForShow()" class="avatar">
                 </div>
               </td>
@@ -156,13 +156,13 @@
 
             <tr>
               <td>身份证号</td>
-              <td colspan="2">{{studentData.id_number}}</td>
+              <td colspan="3">{{studentData.id_number}}</td>
               <td>手机号码</td>
-              <td colspan="2">{{studentData.phone}}</td>
+              <td colspan="3">{{studentData.phone}}</td>
             </tr>
             <tr>
-              <td>班期</td>
-              <td colspan="8">{{studentData.class_no}}</td>
+              <td>部门</td>
+              <td colspan="8">{{studentData.dept_name}}</td>
             </tr>
             <tr>
               <td>备注</td>
@@ -375,7 +375,6 @@
 </script>
 
 <style>
-
   .el-table th {
     padding: 5px 0;
   }
@@ -384,12 +383,25 @@
     padding: 8px 0;
   }
 
+  .avatar {
+    width: 130px;
+    height: 170px;
+    display: block;
+  }
+
+  #table, #table tr th, #table tr td {
+    border: 1px solid ;
+  }
+
+  #table tr td {
+    width: 100px;
+    height: 60px;
+  }
+
   #table {
-    border: solid #add9c0;
-    border-width: 1px;
     width: 100%;
     height: 400px;
-
+    border-collapse: collapse
   }
 
   #showdiv {
@@ -397,5 +409,4 @@
     background-size: 100% 100%;
     margin-top: -20px;
   }
-
 </style>
