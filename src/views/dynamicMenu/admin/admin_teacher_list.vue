@@ -147,7 +147,7 @@
                 })
             },
             deleteTeacher: function (teacher) {
-                this.$confirm('确定删除该教师信息?', '提示', {
+                this.$confirm('若该教师有相关班期信息，将一并删除，确认删除？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

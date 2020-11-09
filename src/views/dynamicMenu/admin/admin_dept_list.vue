@@ -150,7 +150,7 @@
                 })
             },
             deleteDept: function (dept) {
-                this.$confirm('确定删除该部门信息?', '提示', {
+                this.$confirm('若该部门下有相关经理信息，将一并删除，确认删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
