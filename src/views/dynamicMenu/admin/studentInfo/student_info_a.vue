@@ -1,8 +1,8 @@
 <template xmlns:v-model="">
   <div>
-    <el-row >
+    <el-row>
 
-      <el-col :span="22" >
+      <el-col :span="22">
         <div class="grid-content bg-purple">
           <el-input v-model="student_name" placeholder="请输入学生姓名" style="width:185px"></el-input>
           <el-input v-model="class_no" placeholder="请输入学生班期" style="width:183px"></el-input>
@@ -141,7 +141,7 @@
             </el-form>
           </el-dialog>
 
-          <el-dialog title="学生信息修改" :visible.sync="editDialogVisible" width="70%"  :append-to-body='true' >
+          <el-dialog title="学生信息修改" :visible.sync="editDialogVisible" width="70%">
             <el-form :model="editForm" :rules="rules" ref="editForm" label-width="10px" class="demo-ruleForm">
 
               <table>
@@ -158,10 +158,10 @@
                   </td>
                   <td rowspan="4">
                     <div style="margin-left: 20px; margin-top: -78px">
-                      <div style="margin-top: 53%">
-                        <img v-if="editForm.img_path" :src="getImgPathForEdit()" class="avatar">
+                      <!--<div style="margin-top: 53%">
+                        <img v-if="editForm.img_path" :src="require('@/assets/' + this.editForm.img_path)" class="avatar">
                         <h5 style="margin-right:20%">原头像</h5>
-                      </div>
+                      </div>-->
                       <div style="margin-right: 22% ">
                         <el-upload
                           class="avatar-uploader"
@@ -170,10 +170,12 @@
                           :on-success="handleeditAvatarChange"
                           :before-upload="beforeeditAvatarUpload"
                         >
-                          <img v-if="editForm.imgPath" :src="editForm.imgPath" class="avatar">
+                          <img v-if="editForm.img_path" :src="require('@/assets/' + this.editForm.img_path)"
+                               class="avatar">
+
                           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                           <div class="el-upload__tip" slot="tip">
-                            <h4>修改后头像</h4>
+                            <!--<h4>修改后头像</h4>-->
                             上传头像只能是jpg文件，且不超过2MB!
                           </div>
 
@@ -310,7 +312,7 @@
                   <td>{{tablesex}}</td>
                   <td rowspan="4" colspan="1">
                     <div style="margin-top: -23%">
-                      <img v-if="tableimg_path" :src="getImgPathForShow()" class="avatar">
+                      <img v-if="tableimg_path" :src="require('@/assets/' + this.tableimg_path)" class="avatar">
                     </div>
                   </td>
                 </tr>
@@ -424,7 +426,7 @@
               sortable
             >
             </el-table-column>
-            <el-table-column label="操作" width="190" fixed="right" >
+            <el-table-column label="操作" width="190" fixed="right">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
@@ -517,7 +519,7 @@
                     remark: '',
                     phone: '',
                     img_path: '',
-                    imgPath:'',
+                    imgPath: '',
                     class: []
                 }
                 ,
@@ -538,8 +540,8 @@
                     native_place: '',
                     remark: '',
                     img_path: '',
-                    imgPath:'',
-                    img_path_new:'',
+                    imgPath: '',
+                    img_path_new: '',
                     class: [],
                     dept: []
                 }
@@ -611,11 +613,11 @@
 
         },
         methods: {
-            getImgPathForShow(){
-                return require('@/assets/' + this.tableimg_path) ;
+            getImgPathForShow() {
+                return require('@/assets/' + this.tableimg_path);
             },
-            getImgPathForEdit(){
-                return require('@/assets/' + this.editForm.img_path) ;
+            getImgPathForEdit() {
+                return require('@/assets/' + this.editForm.img_path);
             },
             //  获取分页员工列表
             getStudentListByPage() {
@@ -698,11 +700,11 @@
                 this.addDialogVisible = true
 
             },
-            handleAvatarChange(res,file) {
+            handleAvatarChange(res, file) {
                 //回显
                 this.form.img_path = URL.createObjectURL(file.raw);
                 //传值
-                this.form.imgPath=res;
+                this.form.imgPath = res;
 
 
             },
@@ -739,24 +741,24 @@
                                 remark: this.form.remark
                             }
                         })*/
-                        var student_name= this.form.student_name,
-                            folk= this.form.folk,
-                            sex= this.form.sex,
-                            marital_status= this.form.marital_status,
-                            id_number= this.form.id_number,
-                            graduate_school= this.form.graduate_school,
-                            birthday= this.form.birthday,
-                            major= this.form.major,
-                            class_no= this.form.class_no,
-                            phone= this.form.phone,
-                            native_place= this.form.native_place,
-                            img_path= this.form.imgPath,
-                            remark= this.form.remark;
+                        var student_name = this.form.student_name,
+                            folk = this.form.folk,
+                            sex = this.form.sex,
+                            marital_status = this.form.marital_status,
+                            id_number = this.form.id_number,
+                            graduate_school = this.form.graduate_school,
+                            birthday = this.form.birthday,
+                            major = this.form.major,
+                            class_no = this.form.class_no,
+                            phone = this.form.phone,
+                            native_place = this.form.native_place,
+                            img_path = this.form.imgPath,
+                            remark = this.form.remark;
                         console.log("img_path--")
                         console.log(img_path)
-                        http.admin_student.addStudents(student_name, folk,sex,marital_status, id_number,
-                            graduate_school,birthday,major,class_no, phone,
-                            native_place,img_path,remark).then(res => {
+                        http.admin_student.addStudents(student_name, folk, sex, marital_status, id_number,
+                            graduate_school, birthday, major, class_no, phone,
+                            native_place, img_path, remark).then(res => {
 
                             if (res.data == true) {
                                 this.$message({
@@ -834,13 +836,13 @@
                 /*this.editForm.imgPath = "";*/
             },
 
-            handleeditAvatarChange(res,file) {
+            handleeditAvatarChange(res, file) {
                 //回显
-                this.editForm.imgPath = URL.createObjectURL(file.raw);
-                console.log(this.editForm.imgPath)
+                // this.editForm.imgPath = URL.createObjectURL(file.raw);
+                //  console.log(this.editForm.imgPath)
 
                 //传值
-                this.editForm.img_path_new=res;
+                this.editForm.img_path = res;
 
             },
 
@@ -881,26 +883,26 @@
                                 remark: this.editForm.remark
                             }
                         })*/
-                        var  student_id= this.editForm.student_id,
-                            student_name= this.editForm.student_name,
-                            folk= this.editForm.folk,
-                            sex= this.editForm.sex,
-                            marital_status= this.editForm.marital_status,
-                            id_number=this.editForm.id_number,
-                            graduate_school= this.editForm.graduate_school,
-                            birthday= this.editForm.birthday,
-                            major= this.editForm.major,
-                            class_no= this.editForm.class_no,
-                            native_place= this.editForm.native_place,
-                            img_path= this.editForm.img_path_new,
-                            phone=this.editForm.phone,
-                            dept_name= this.editForm.dept_name,
-                            remark= this.editForm.remark;
+                        var student_id = this.editForm.student_id,
+                            student_name = this.editForm.student_name,
+                            folk = this.editForm.folk,
+                            sex = this.editForm.sex,
+                            marital_status = this.editForm.marital_status,
+                            id_number = this.editForm.id_number,
+                            graduate_school = this.editForm.graduate_school,
+                            birthday = this.editForm.birthday,
+                            major = this.editForm.major,
+                            class_no = this.editForm.class_no,
+                            native_place = this.editForm.native_place,
+                            img_path = this.editForm.img_path,
+                            phone = this.editForm.phone,
+                            dept_name = this.editForm.dept_name,
+                            remark = this.editForm.remark;
                         console.log("我的图片地址：")
                         console.log(img_path)
-                        http.admin_student.editStudent(student_id,student_name,folk,sex,marital_status,
-                            id_number,graduate_school,birthday,major,class_no,
-                            native_place, img_path,phone,dept_name, remark).then(res => {
+                        http.admin_student.editStudent(student_id, student_name, folk, sex, marital_status,
+                            id_number, graduate_school, birthday, major, class_no,
+                            native_place, img_path, phone, dept_name, remark).then(res => {
                             if (res.data == true) {
                                 this.$message({
                                     message: '修改成功',
@@ -937,7 +939,7 @@
                         student_id: this.delStudent_id
                     }
                 })*/
-                var student_id= this.delStudent_id;
+                var student_id = this.delStudent_id;
                 http.admin_student.delStudent(student_id).then(res => {
                     if (res.data == true) {
                         this.$message({
@@ -957,7 +959,7 @@
             }
         },
 
-        created() {
+        mounted() {
             this.getStudentListByPage();
             this.getStudentList();
             this.getAllClass_no();
@@ -995,11 +997,16 @@
     display: block;
   }
 
+  #table, #table tr th, #table tr td {
+    border: 1px solid ;
+  }
+
   #table {
-    border: solid #add9c0;
-    border-width: 1px;
+    /*border: solid #add9c0;
+    border-width: 1px;*/
     width: 100%;
     height: 400px;
+    border-collapse: collapse
 
   }
 
@@ -1012,6 +1019,7 @@
     background-size: 100% 100%;
     margin-top: -20px;
   }
+
   .el-table__fixed {
     height: 100% !important;
   }
