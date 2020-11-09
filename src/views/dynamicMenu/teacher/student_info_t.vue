@@ -60,7 +60,7 @@
         <el-table-column
           fixed="right"
           label="操作"
-          align="center">
+          align="center" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="handleShow(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="Scoring(scope.row)">打分</el-button>
