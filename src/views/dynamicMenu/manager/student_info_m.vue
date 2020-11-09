@@ -348,7 +348,7 @@
                                 evaluationFormDept: this.evaluateForm.evaluationFormDept
                             }
                         })*/
-                        var managerName = this.$store.state.user.userId,
+                        var managerName = this.$store.state.user.userName,
                             studentId = this.evaluateForm.studentId,
                             periodNo = this.periodNo,//转正
                             overallScore = this.evaluateForm.overallScore,

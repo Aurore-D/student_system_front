@@ -613,12 +613,7 @@
 
         },
         methods: {
-            getImgPathForShow() {
-                return require('@/assets/' + this.tableimg_path);
-            },
-            getImgPathForEdit() {
-                return require('@/assets/' + this.editForm.img_path);
-            },
+
             //  获取分页员工列表
             getStudentListByPage() {
                 /*axios.get('getStudentByPage', {
