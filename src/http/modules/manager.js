@@ -107,4 +107,16 @@ export function evaluatingStudentWithManager(managerName, studentId, periodNo, o
   )
 }
 
+export function getStudentWithUserById(studentId) {
+  return http(
+    {
+      url: '/getStudentWithUserById',
+      method: 'get',
+      params: {
+        studentId: studentId,
+      }
+    }
+  )
+}
+
 

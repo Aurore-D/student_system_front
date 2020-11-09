@@ -78,3 +78,15 @@ export function evaluatingStudentWithTeacher(teacherName, studentId, overallScor
     }
   )
 }
+
+export function getStudentWithUserById(studentId) {
+  return http(
+    {
+      url: '/getStudentWithUserById',
+      method: 'get',
+      params: {
+        studentId: studentId,
+      }
+    }
+  )
+}

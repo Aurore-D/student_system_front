@@ -29,16 +29,6 @@
           width="60"
         >
         </el-table-column>
-        <el-table-column
-          prop="graduate_school"
-          label="学校" align="center"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="native_place"
-          label="籍贯" align="center"
-        >
-        </el-table-column>
 
         <!--内嵌的成绩表格-->
         <el-table-column label="培训期间测试成绩" align="center">
@@ -53,7 +43,7 @@
             prop="overall_score"
             label="整体评价分数" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.overall_score == null">未打分</span>
+              <span v-if="scope.row.overall_score == null">未评分</span>
               <span v-else>{{scope.row.overall_score}}</span>
             </template>
           </el-table-column>
@@ -72,6 +62,7 @@
           label="操作"
           align="center">
           <template slot-scope="scope">
+            <el-button type="text" size="small" @click="handleShow(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="Scoring(scope.row)">打分</el-button>
             <el-button type="text" size="small" @click="evaluate(scope.row)">评价</el-button>
           </template>
@@ -128,6 +119,60 @@
         </div>
       </el-dialog>
 
+      <!--查看信息-->
+      <el-dialog title="学生信息查看" :visible.sync="showDialogVisible" width="70%" :close-on-click-modal="false">
+        <div id="showdiv">
+          <table id="table">
+            <tr>
+              <td>姓名</td>
+              <td>{{studentData.student_name}}</td>
+              <td>学号</td>
+              <td>{{studentData.student_id}}</td>
+              <td>性别</td>
+              <td>{{studentData.sex}}</td>
+              <td rowspan="4" colspan="1">
+                <div style="margin-top: -23%">
+                  <img v-if="studentData.img_path" :src="getImgPathForShow()" class="avatar">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>出生日期</td>
+              <td>{{studentData.birthday}}</td>
+              <td>籍贯</td>
+              <td>{{studentData.native_place}}</td>
+              <td>民族</td>
+              <td>{{studentData.folk}}</td>
+            </tr>
+
+            <tr>
+              <td>毕业院校</td>
+              <td>{{studentData.graduate_school}}</td>
+              <td>专业</td>
+              <td>{{studentData.major}}</td>
+              <td>婚否</td>
+              <td>{{studentData.marital_status}}</td>
+            </tr>
+
+            <tr>
+              <td>身份证号</td>
+              <td colspan="2">{{studentData.id_number}}</td>
+              <td>手机号码</td>
+              <td colspan="2">{{studentData.phone}}</td>
+            </tr>
+            <tr>
+              <td>班期</td>
+              <td colspan="8">{{studentData.class_no}}</td>
+            </tr>
+            <tr>
+              <td>备注</td>
+              <td colspan="8">{{studentData.remark}}</td>
+            </tr>
+
+          </table>
+        </div>
+      </el-dialog>
+
     </div>
     <div class="block">
       <el-pagination
@@ -157,6 +202,7 @@
                 tableData: [],
                 tableColumnList: [],//动态表头
                 student_name: "",
+                studentData:[],
                 pageSize: 5,//每页的数据条数
                 curPage: 1,//默认开始页码
                 total: 0,
@@ -165,6 +211,7 @@
                 //默认dialog弹窗不打开（true打开，false为不打开）
                 editFormVisible: false,
                 EvaluateVisible: false,
+                showDialogVisible: false,
                 //表单验证
                 rulesForEvaluate: {
                     overallScore: [
@@ -306,7 +353,18 @@
                   return false;
                 }
               });
-              }
+              },
+          //查看信息
+            handleShow:function(student) {
+              this.showDialogVisible = true;
+              var studentId = student.student_id;
+              http.teacher.getStudentWithUserById(studentId).then(res =>{
+                this.studentData = res.data;
+              })
+            },
+            getImgPathForShow(){
+              return require('@/assets/' + this.studentData.img_path) ;
+            },
         },
         //生命周期钩子
         mounted() {//编译后去获取数据
@@ -324,6 +382,20 @@
 
   .el-table td {
     padding: 8px 0;
+  }
+
+  #table {
+    border: solid #add9c0;
+    border-width: 1px;
+    width: 100%;
+    height: 400px;
+
+  }
+
+  #showdiv {
+    /*background-image:url("../assets/images/bg2.jpg");*/
+    background-size: 100% 100%;
+    margin-top: -20px;
   }
 
 </style>
