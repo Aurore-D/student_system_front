@@ -150,7 +150,7 @@
                 })
             },
             deleteDept: function (dept) {
-                this.$confirm('若该部门下有相关经理信息，将一并删除，确认删除?', '提示', {
+                this.$confirm('确认删除该部门信息?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -163,10 +163,17 @@
                     var deptNo = dept.deptNo;
                     http.admin_dept_list.deleteDept(deptNo).then(res => {
                         this.getAllDeptByPage();
+                      if (res.data == "success") {
                         this.$message({
-                            message: res.data,
-                            type: 'success'
+                          message: '删除成功',
+                          type: 'success'
                         });
+                      } else {
+                        this.$message({
+                          message: res.data,
+                          type: 'error'
+                        });
+                      }
                     })
                 });
             },
