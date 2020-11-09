@@ -310,8 +310,8 @@
                   <td>{{tablestudent_id}}</td>
                   <td>性别</td>
                   <td>{{tablesex}}</td>
-                  <td rowspan="4" colspan="1">
-                    <div style="margin-top: -23%">
+                  <td rowspan="3" colspan="1">
+                    <div style="margin-top: -2%;margin-left: 9%">
                       <img v-if="tableimg_path" :src="require('@/assets/' + this.tableimg_path)" class="avatar">
                     </div>
                   </td>
@@ -336,9 +336,9 @@
 
                 <tr>
                   <td>身份证号</td>
-                  <td colspan="2">{{tableid_number}}</td>
+                  <td colspan="3">{{tableid_number}}</td>
                   <td>手机号码</td>
-                  <td colspan="2">{{tablephone}}</td>
+                  <td colspan="3">{{tablephone}}</td>
                 </tr>
 
                 <tr>
@@ -992,8 +992,8 @@
   }
 
   .avatar {
-    width: 160px;
-    height: 190px;
+    width: 130px;
+    height: 170px;
     display: block;
   }
 
@@ -1012,6 +1012,7 @@
 
   #table tr td {
     width: 100px;
+    height: 60px;
   }
 
   #showdiv {
