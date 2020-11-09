@@ -111,6 +111,9 @@
           <el-form-item label="员工编号">
             <el-input v-model="evaluateForm.studentId" readonly=""></el-input>
           </el-form-item>
+          <el-form-item label="评价人">
+            <el-input v-model="evaluateForm.managerName" readonly=""></el-input>
+          </el-form-item>
           <el-form-item label="整体评价分数" prop="overallScore">
             <el-input v-model.number="evaluateForm.overallScore" placeholder="请输入0-5的评价分数"></el-input>
           </el-form-item>
