@@ -72,7 +72,7 @@ http.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          router.push({
+          this.$router.push({
             name: 'Login'
           });
           removeToken()

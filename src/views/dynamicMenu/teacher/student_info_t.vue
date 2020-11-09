@@ -161,8 +161,8 @@
               <td colspan="3">{{studentData.phone}}</td>
             </tr>
             <tr>
-              <td>部门</td>
-              <td colspan="8">{{studentData.dept_name}}</td>
+              <td>班期</td>
+              <td colspan="8">{{studentData.class_no}}</td>
             </tr>
             <tr>
               <td>备注</td>
