@@ -47,6 +47,17 @@ export function getStudentByName(student_name,class_no) {
   )
 }
 
+export function delSelect(data) {
+  return http(
+    {
+      url: '/delSelect',
+      method: 'post',
+      params: {},
+      data:data
+    }
+  )
+}
+
 /*axios.get("getAllClass_no")*/
 export function getAllClass_no() {
   return http(

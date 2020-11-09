@@ -2,7 +2,7 @@
   <div>
     <el-row>
 
-      <el-col :span="22">
+      <el-col :span="20">
         <div class="grid-content bg-purple">
           <el-input v-model="student_name" placeholder="请输入学生姓名" style="width:185px"></el-input>
           <el-input v-model="class_no" placeholder="请输入学生班期" style="width:183px"></el-input>
@@ -10,11 +10,10 @@
         </div>
       </el-col>
 
-      <el-col :span="2">
+      <el-col :span="4">
         <div class="grid-content bg-purple">
-
           <el-button type="primary" @click="handleAdd">添加</el-button>
-
+          <el-button type="danger" @click="handleDel">删除</el-button>
           <!--学生信息添加-->
           <el-dialog title="学生信息添加" :visible.sync="addDialogVisible" width="70%">
             <el-form :model="form" :rules="rules" ref="form" label-width="10px" class="demo-ruleForm">
@@ -381,10 +380,11 @@
         <div class="grid-content bg-purple">
 
           <el-table
+            ref="multipleTable"
             :data="studentData"
             border
             style="width: 100%"
-          >
+            @selection-change="handleSelectionChange">
 
             <el-table-column
               type="selection"
@@ -482,6 +482,8 @@
                 studentData: [],
                 //全部员工数据
                 totalStudentData: [],
+                //全选框数据
+                multipleSelection: [],
                 //对话框显示隐藏，默认隐藏
                 editDialogVisible: false,
                 addDialogVisible: false,
@@ -689,6 +691,41 @@
                     this.totalStudentData = res.data
                 });
 
+            },
+            //全选框
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            //批量删除
+            handleDel: function () {
+
+                this.$confirm('确定删除选中用户?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    /*axios({
+                        method: 'post',
+                        url: 'delSelect',
+                        data: this.multipleSelection
+                    })*/
+                    var data = this.multipleSelection;
+                    http.admin_student.delSelect(data).then(res => {
+                        if (res.data == true) {
+                            this.$message({
+                                message: '批量删除成功',
+                                type: 'success'
+                            });
+                            this.getStudentListByPage();
+                            this.getStudentList();
+                        } else {
+                            this.$message({
+                                message: '批量删除失败',
+                                type: 'error'
+                            });
+                        }
+                    });
+                });
             },
 
             handleAdd() {
