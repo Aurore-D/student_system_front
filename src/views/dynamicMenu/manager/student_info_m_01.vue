@@ -286,7 +286,7 @@
                     }
                 })*/
                 var studentId = student.student_id,
-                    periodNo = this.periodNo; //转正时期分数;
+                    periodNo = this.periodNo;
                 http.manager.getScoreByStudentIdWithManager(studentId, periodNo).then(res => {
                     this.editForm.qualityScore = res.data.qualityScoreWithStudent;
                 })
