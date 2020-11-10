@@ -132,58 +132,7 @@
       </el-dialog>
 
       <!--查看信息-->
-      <el-dialog title="员工信息查看" :visible.sync="showDialogVisible" width="70%" :close-on-click-modal="false">
-        <div id="showdiv">
-          <table id="table">
-            <tr>
-              <td>姓名</td>
-              <td>{{studentData.student_name}}</td>
-              <td>学号</td>
-              <td>{{studentData.student_id}}</td>
-              <td>性别</td>
-              <td>{{studentData.sex}}</td>
-              <td rowspan="3" colspan="1">
-                <div style="margin-top: -2%;margin-left: 9%">
-                  <img v-if="studentData.img_path" :src="getImgPathForShow()" class="avatar">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>出生日期</td>
-              <td>{{studentData.birthday}}</td>
-              <td>籍贯</td>
-              <td>{{studentData.native_place}}</td>
-              <td>民族</td>
-              <td>{{studentData.folk}}</td>
-            </tr>
-
-            <tr>
-              <td>毕业院校</td>
-              <td>{{studentData.graduate_school}}</td>
-              <td>专业</td>
-              <td>{{studentData.major}}</td>
-              <td>婚否</td>
-              <td>{{studentData.marital_status}}</td>
-            </tr>
-
-            <tr>
-              <td>身份证号</td>
-              <td colspan="3">{{studentData.id_number}}</td>
-              <td>手机号码</td>
-              <td colspan="3">{{studentData.phone}}</td>
-            </tr>
-            <tr>
-              <td>部门</td>
-              <td colspan="8">{{studentData.dept_name}}</td>
-            </tr>
-            <tr>
-              <td>备注</td>
-              <td colspan="8">{{studentData.remark}}</td>
-            </tr>
-
-          </table>
-        </div>
-      </el-dialog>
+      <Student_Info_View v-if="showDialogVisible" ref="student_Info_View"></Student_Info_View>
 
     </div>
     <div class="block">
@@ -206,15 +155,20 @@
 <script>
     import axios from 'axios';
     import http from '@/http/http.js'
+    import Student_Info_View from "../../home/Student_Info_View";
 
     export default {
         name: "student_info_m",
+        components:{
+            Student_Info_View
+        },
         data() {
             return {
-                periodNo:1,
+                studentId:'',
+                periodNo: 1,
                 tableData: [],
                 tableColumnList: [],//动态表头
-                studentData:[],
+                studentData: [],
                 student_name: "",
                 pageSize: 5,//每页的数据条数
                 curPage: 1,//默认开始页码
@@ -375,15 +329,15 @@
                 });
             },
             //查看信息
-            handleShow:function(student) {
-              this.showDialogVisible = true;
-              var studentId = student.student_id;
-              http.manager.getStudentWithUserById(studentId).then(res =>{
-                this.studentData = res.data;
-              })
+            handleShow: function (student) {
+                this.showDialogVisible = true;
+                this.studentId = student.student_id;
+                this.$nextTick(() => {
+                    this.$refs.student_Info_View.handleShow()
+                })
             },
-            getImgPathForShow(){
-              return require('@/assets/' + this.studentData.img_path) ;
+            getImgPathForShow() {
+                return require('@/assets/' + this.studentData.img_path);
             },
         },
         //生命周期钩子
@@ -404,23 +358,23 @@
   }
 
   .avatar {
-    width: 130px;
+    width: 120px;
     height: 170px;
     display: block;
   }
 
-  #table, #table tr th, #table tr td {
-    border: 1px solid ;
+   .table tr th, .table tr td {
+    border: 1px solid;
   }
 
-  #table tr td {
-    width: 100px;
-    height: 60px;
+  .table tr td {
+    width: 80px;
+    height: 40px;
   }
 
-  #table {
+ .table {
     width: 100%;
-    height: 400px;
+    border: 2px solid;
     border-collapse: collapse
   }
 

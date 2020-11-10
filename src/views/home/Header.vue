@@ -69,8 +69,6 @@
         components: {
             // 引入密码框组件
             UpdatePassword,
-
-
         },
         computed: {
             //...mapState('user', {userName: 'userName'}),
