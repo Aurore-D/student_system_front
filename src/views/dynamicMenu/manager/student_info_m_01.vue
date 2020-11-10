@@ -86,6 +86,7 @@
                           { type: 'number', message: '分数必须为数字值'},
                           { pattern: /^([0-5]|5)$/,message: '分数范围在0-5'}]">
             <span>{{tableColumnList[index].quality_name}}</span>
+            <el-input v-model="item.periodNo" readonly="" v-show="false"></el-input>
             <el-input v-model="item.studentId" readonly="" v-show="false"></el-input>
             <el-input v-model="item.qualityId" readonly="" v-show="false"></el-input>
             <el-input v-model.number="item.score" auto-complete="off"></el-input>
