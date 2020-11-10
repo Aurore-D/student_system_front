@@ -133,14 +133,20 @@
             // 退出登录，回到登录界面
             logout() {
                 /**********************************************************笨办法*****好处：不用刷新页面*********************************************/
-                //移除localStore中的值
-                localStorage.removeItem('state')
-                //移除cookie存的token
-                removeToken()
-                //全局路由导航守卫的是否添加动态路由置false
-                this.$router.options.isAddDynamicMenuRoutes = false;
-                //跳转登录页面
-                this.$router.push("/Login")
+                this.$confirm('确认退出?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //移除localStore中的值
+                    localStorage.removeItem('state')
+                    //移除cookie存的token
+                    removeToken()
+                    //全局路由导航守卫的是否添加动态路由置false
+                    this.$router.options.isAddDynamicMenuRoutes = false;
+                    //跳转登录页面
+                    this.$router.push("/Login")
+                });
             }
         }
     }
