@@ -2,8 +2,8 @@
   <div style="height: 460px">
     <!--添加class的表单-->
     <el-dialog title="添加班期信息" :visible.sync="addClassForm.dialogFormVisible" width="30%">
-      <el-form>
-        <el-form-item label="教师工号:">
+      <el-form :model="addClassForm" label-width="80px" :rules="rules" ref="addClassForm" class="demo-ruleForm">
+        <el-form-item  label-width="100px" label="教师工号:" prop="teacher_id">
           <el-select v-model="addClassForm.teacher_id" placeholder="请选择教师">
             <el-option v-for="i in (addClassForm.teacher.length)" :key="i" v-model:label="addClassForm.teacher[i-1]"
                        v-model:value="addClassForm.teacher[i-1]"></el-option>
@@ -12,7 +12,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addClassForm.dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addClass">确 定</el-button>
+        <el-button type="primary" @click="addClass('addClassForm')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -20,7 +20,7 @@
     <el-dialog title="修改班期信息" :visible.sync="updateClassForm.dialogFormVisible" width="30%">
       <el-form label-width="80px">
         <el-form-item label="班期号:">
-          <el-input  v-model="updateClassForm.class_no" style="width: 80%" readonly></el-input>
+          <el-input v-model="updateClassForm.class_no" style="width: 80%" readonly></el-input>
         </el-form-item>
         <el-form-item label="班级教师:">
           <el-select v-model="updateClassForm.teacher_id" style="width: 80%">
@@ -103,6 +103,11 @@
           teacher_id: '',
           teacher: []
         },
+        rules: {
+          'teacher_id': [
+            {required: true, message: '请选择教师', trigger: 'blur'}
+          ]
+        }
       }
     },
     //方法
@@ -138,20 +143,26 @@
           this.updateClassForm.teacher = res.data;
         })
       },
-      addClass: function () {
-        this.addClassForm.dialogFormVisible = false;
-        /*axios.get("addClass", {
-          params: {
-            teacherId: this.addClassForm.teacher_id
+      addClass: function (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.addClassForm.dialogFormVisible = false;
+            /*axios.get("addClass", {
+                params: {
+                  teacherId: this.addClassForm.teacher_id
+                }
+              })*/
+            var teacherId = this.addClassForm.teacher_id;
+            http.admin_class_list.addClass(teacherId).then(res => {
+              this.getAllClassByPage();
+              this.$message({
+                message: res.data,
+                type: 'success'
+              });
+            })
+          } else {
+            return false;
           }
-        })*/
-        var teacherId = this.addClassForm.teacher_id;
-        http.admin_class_list.addClass(teacherId).then(res => {
-          this.getAllClassByPage();
-          this.$message({
-            message: res.data,
-            type: 'success'
-          });
         })
       },
       deleteClass: function (_class) {
@@ -161,41 +172,41 @@
           type: 'warning'
         }).then(() => {
 
-                    /*axios.get("deleteClass", {
-                      params: {
-                        classNo: _class.class_no
-                      }
-                    })*/
-                    var classNo = _class.class_no;
-                    http.admin_class_list.deleteClass(classNo).then(res => {
-                        this.getAllClassByPage();
-                        this.$message({
-                            message: res.data,
-                            type: 'success'
-                        });
-                    })
-                });
-            },
-            getClassById: function (_class) {
-                this.updateClassForm.dialogFormVisible = true;
-                /* axios.get("getClassByNo", {
-                   params: {
-                     classNo: _class.class_no
-                   }
-                 })*/
-                var classNo = _class.class_no;
-                http.admin_class_list.getClassById(classNo).then(res => {
-                    this.updateClassForm.class_no = res.data.classNo;
-                    this.updateClassForm.teacher_id = res.data.teacherId;
-                })
-            },
-            updateClassByNo: function () {
-                this.$confirm('确定修改该班级信息?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.updateClassForm.dialogFormVisible = false;
+          /*axios.get("deleteClass", {
+            params: {
+              classNo: _class.class_no
+            }
+          })*/
+          var classNo = _class.class_no;
+          http.admin_class_list.deleteClass(classNo).then(res => {
+            this.getAllClassByPage();
+            this.$message({
+              message: res.data,
+              type: 'success'
+            });
+          })
+        });
+      },
+      getClassById: function (_class) {
+        this.updateClassForm.dialogFormVisible = true;
+        /* axios.get("getClassByNo", {
+           params: {
+             classNo: _class.class_no
+           }
+         })*/
+        var classNo = _class.class_no;
+        http.admin_class_list.getClassById(classNo).then(res => {
+          this.updateClassForm.class_no = res.data.classNo;
+          this.updateClassForm.teacher_id = res.data.teacherId;
+        })
+      },
+      updateClassByNo: function () {
+        this.$confirm('确定修改该班级信息?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.updateClassForm.dialogFormVisible = false;
 
           /* axios.get("updateClassByNo", {
              params: {

@@ -2,30 +2,31 @@
   <div style="height: 460px">
     <!--添加teacher的表单-->
     <el-dialog title="添加教师信息" :visible.sync="addTeacherForm.dialogFormVisible" width="30%">
-      <el-form label-width="80px">
-        <el-form-item label="教师姓名:">
+      <el-form :model="addTeacherForm" label-width="80px" :rules="rules" ref="addTeacherForm" class="demo-ruleForm">
+        <el-form-item label="教师姓名:" prop="teacher_name" label-width="100px">
           <el-input v-model="addTeacherForm.teacher_name" placeholder="请输入教师姓名"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addTeacherForm.dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addTeacher">确 定</el-button>
+        <el-button type="primary" @click="addTeacher('addTeacherForm')">确 定</el-button>
       </div>
     </el-dialog>
 
     <!--修改teacher信息的表单-->
     <el-dialog title="修改教师信息" :visible.sync="updateTeacherForm.dialogFormVisible" width="30%">
-      <el-form label-width="80px">
-        <el-form-item label="教师工号:">
+      <el-form :model="updateTeacherForm" label-width="80px" :rules="rules" ref="updateTeacherForm"
+               class="demo-ruleForm">
+        <el-form-item label="教师工号:" label-width="100px">
           <el-input readonly v-model="updateTeacherForm.teacher.teacherId"></el-input>
         </el-form-item>
-        <el-form-item label="教师姓名:">
+        <el-form-item label="教师姓名:" prop="teacher.teacherName" label-width="100px">
           <el-input v-model="updateTeacherForm.teacher.teacherName"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateTeacherForm.dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateTeacherById">确 定</el-button>
+        <el-button type="primary" @click="updateTeacherById('updateTeacherForm')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -96,8 +97,16 @@
         //修改manager的数据
         updateTeacherForm: {
           dialogFormVisible: false,
-          teacher: []
+          teacher: [],
         },
+        rules: {
+          'teacher_name': [
+            {required: true, message: '教师姓名不能为空', trigger: 'blur'}
+          ],
+          'teacher.teacherName': [
+            {required: true, message: '教师姓名不能为空', trigger: 'blur'}
+          ]
+        }
 
       }
     },
@@ -130,20 +139,26 @@
           this.teacher_list.tableData = res.data;
         })
       },
-      addTeacher: function () {
-        this.addTeacherForm.dialogFormVisible = false;
-        /*axios.get("addTeacher", {
+      addTeacher: function (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.addTeacherForm.dialogFormVisible = false;
+            /*axios.get("addTeacher", {
           params: {
             teacherName: this.addTeacherForm.teacher_name
           }
         })*/
-        var teacherName = this.addTeacherForm.teacher_name;
-        http.admin_teacher_list.addTeacher(teacherName).then(res => {
-          this.getAllTeacherByPage();
-          this.$message({
-            message: res.data,
-            type: 'success'
-          });
+            var teacherName = this.addTeacherForm.teacher_name;
+            http.admin_teacher_list.addTeacher(teacherName).then(res => {
+              this.getAllTeacherByPage();
+              this.$message({
+                message: res.data,
+                type: 'success'
+              });
+            })
+          } else {
+            return false;
+          }
         })
       },
       deleteTeacher: function (teacher) {
@@ -187,28 +202,34 @@
           this.updateTeacherForm.teacher = res.data;
         })
       },
-      updateTeacherById: function () {
-        this.$confirm('确定修改该教师信息?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.updateTeacherForm.dialogFormVisible = false;
-          /*axios.get("updateTeacherById", {
-            params: {
-              teacherId: this.updateTeacherForm.teacher.teacherId,
-              teacherName: this.updateTeacherForm.teacher.teacherName
-            }
-          })*/
-          var teacherId = this.updateTeacherForm.teacher.teacherId,
-            teacherName = this.updateTeacherForm.teacher.teacherName;
-          http.admin_teacher_list.updateTeacherById(teacherId, teacherName).then(res => {
-            this.getAllTeacherByPage();
-            this.$message({
-              message: res.data,
-              type: 'success'
-            });
-          })
+      updateTeacherById: function (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.$confirm('确定修改该教师信息?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.updateTeacherForm.dialogFormVisible = false;
+              /*axios.get("updateTeacherById", {
+                params: {
+                  teacherId: this.updateTeacherForm.teacher.teacherId,
+                  teacherName: this.updateTeacherForm.teacher.teacherName
+                }
+              })*/
+              var teacherId = this.updateTeacherForm.teacher.teacherId,
+                teacherName = this.updateTeacherForm.teacher.teacherName;
+              http.admin_teacher_list.updateTeacherById(teacherId, teacherName).then(res => {
+                this.getAllTeacherByPage();
+                this.$message({
+                  message: res.data,
+                  type: 'success'
+                });
+              })
+            })
+          } else {
+            return false;
+          }
         });
       },
 
