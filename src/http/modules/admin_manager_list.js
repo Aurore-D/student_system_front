@@ -1,23 +1,21 @@
 import http from '@/http/httpRequest.js'
 
 
-
-
 /* axios.get("getAllManager", {
          params: {
            managerName: this.manager_list.manager_name
          }
        })*/
 export function getAllManager(managerName) {
-    return http(
-      {
-        url: '/getAllManager',
-        method: 'get',
-        params:{
-          managerName:managerName
-        }
+  return http(
+    {
+      url: '/getAllManager',
+      method: 'get',
+      params: {
+        managerName: managerName
+      }
     }
-    )
+  )
 }
 
 /*axios.get("getAllManagerByPage", {
@@ -27,15 +25,15 @@ export function getAllManager(managerName) {
             managerName: this.manager_list.manager_name
           }
         })*/
-export function getAllManagerByPage(pageSize,currentPage,managerName) {
+export function getAllManagerByPage(pageSize, currentPage, managerName) {
   return http(
     {
       url: '/getAllManagerByPage',
       method: 'get',
-      params:{
-        pageSize:pageSize,
-        currentPage:currentPage,
-        managerName:managerName
+      params: {
+        pageSize: pageSize,
+        currentPage: currentPage,
+        managerName: managerName
       }
     }
   )
@@ -47,7 +45,7 @@ export function getAllDept_name() {
     {
       url: '/getAllDept_name',
       method: 'get',
-      params:{}
+      params: {}
     }
   )
 }
@@ -58,14 +56,14 @@ export function getAllDept_name() {
                     deptName: this.addManagerForm.dept_name
                   }
                 })*/
-export function addManager(managerName,deptName) {
+export function addManager(managerName, deptName) {
   return http(
     {
       url: '/addManager',
       method: 'get',
-      params:{
-        managerName:managerName,
-        deptName:deptName
+      params: {
+        managerName: managerName,
+        deptName: deptName
       }
     }
   )
@@ -81,8 +79,8 @@ export function deleteManager(managerId) {
     {
       url: '/deleteManager',
       method: 'get',
-      params:{
-        managerId:managerId
+      params: {
+        managerId: managerId
       }
     }
   )
@@ -98,8 +96,8 @@ export function getManagerById(managerId) {
     {
       url: '/getManagerById',
       method: 'get',
-      params:{
-        managerId:managerId
+      params: {
+        managerId: managerId
       }
     }
   )
@@ -112,16 +110,27 @@ export function getManagerById(managerId) {
                             deptName: this.updateManagerForm.dept_name
                         }
                     })*/
-export function updateManagerById(managerId,managerName,deptName) {
+export function updateManagerById(managerId, managerName, deptName) {
   return http(
     {
       url: '/updateManagerById',
       method: 'get',
-      params:{
-        managerId:managerId,
-        managerName:managerName,
-        deptName:deptName
+      params: {
+        managerId: managerId,
+        managerName: managerName,
+        deptName: deptName
       }
+    }
+  )
+}
+
+export function batchdelete(managers) {
+  return http(
+    {
+      url: '/batchdeleteManager',
+      method: 'post',
+      params: {},
+      data: managers
     }
   )
 }

@@ -4,13 +4,13 @@ import http from '@/http/httpRequest.js'
 /*axios.get("getAllClass")*/
 
 export function getAllClass() {
-    return http(
-      {
-        url: '/getAllClass',
-        method: 'get',
-        params:{}
+  return http(
+    {
+      url: '/getAllClass',
+      method: 'get',
+      params: {}
     }
-    )
+  )
 }
 
 /*axios.get("getAllClassByPage", {
@@ -20,12 +20,12 @@ export function getAllClass() {
           }
         })*/
 
-export function getAllClassByPage(pageSize,currentPage) {
+export function getAllClassByPage(pageSize, currentPage) {
   return http(
     {
       url: '/getAllClassByPage',
       method: 'get',
-      params:{
+      params: {
         pageSize: pageSize,
         currentPage: currentPage
       }
@@ -39,7 +39,7 @@ export function getAllTeacher_name() {
     {
       url: '/getAllTeacher_name',
       method: 'get',
-      params:{}
+      params: {}
     }
   )
 }
@@ -55,12 +55,13 @@ export function addClass(teacherId) {
     {
       url: '/addClass',
       method: 'get',
-      params:{
+      params: {
         teacherId: teacherId
       }
     }
   )
 }
+
 /*axios.get("deleteClass", {
             params: {
               classNo: _class.class_no
@@ -71,12 +72,13 @@ export function deleteClass(classNo) {
     {
       url: '/deleteClass',
       method: 'get',
-      params:{
+      params: {
         classNo: classNo
       }
     }
   )
 }
+
 /* axios.get("getClassByNo", {
           params: {
             classNo: _class.class_no
@@ -87,27 +89,39 @@ export function getClassById(classNo) {
     {
       url: '/getClassById',
       method: 'get',
-      params:{
+      params: {
         classNo: classNo
       }
     }
   )
 }
+
 /* axios.get("updateClassByNo", {
             params: {
               classNo: this.updateClassForm.class_no,
               teacherId: this.updateClassForm.teacher_id
             }
           })*/
-export function updateClassById(classNo,teacherId) {
+export function updateClassById(classNo, teacherId) {
   return http(
     {
       url: '/updateClassById',
       method: 'get',
-      params:{
+      params: {
         classNo: classNo,
-        teacherId:teacherId
+        teacherId: teacherId
       }
+    }
+  )
+}
+
+export function batchdelete(classes) {
+  return http(
+    {
+      url: '/batchdeleteClass',
+      method: 'post',
+      params: {},
+      data: classes
     }
   )
 }

@@ -37,13 +37,20 @@
     </el-dialog>
 
     <!--主页面-->
-    <div style="margin-left: 25%;margin-bottom:1% ">
+    <div style="margin-left: 18%;margin-bottom:1% ">
       <el-button @click="addClassForm.dialogFormVisible = true">新增</el-button>
+      <el-button @click="batchdelete">删除</el-button>
     </div>
     <el-table
       :data="class_list.tableData"
       border
-      style="width: 450px;margin-left:25%">
+      style="width: 450px;margin-left:25%"
+      @selection-change="handleSelectionChange">
+
+      <el-table-column
+        type="selection"
+        width="55" >
+      </el-table-column>
       <el-table-column
         prop="class_no" align="center"
         label="班期号"
@@ -87,7 +94,8 @@
           tableData: [],
           total: 0,
           page_size: 5,
-          current_page: 1
+          current_page: 1,
+          multipleSelection: []
         },
         //新增class的数据
         addClassForm: {
@@ -217,6 +225,30 @@
           var classNo = this.updateClassForm.class_no,
             teacherId = this.updateClassForm.teacher_id;
           http.admin_class_list.updateClassById(classNo, teacherId).then(res => {
+            this.getAllClassByPage();
+            this.$message({
+              message: res.data,
+              type: 'success'
+            });
+          })
+        });
+      },
+      handleSelectionChange(val) {
+        this.class_list.multipleSelection = val;
+      },
+      batchdelete: function () {
+        this.$confirm('确定删除选中班期信息?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          /*axios({
+              method: 'post',
+              url: 'repassword',
+              data: this.multipleSelection
+          })*/
+          var data = this.class_list.multipleSelection;
+          http.admin_class_list.batchdelete(data).then(res => {
             this.getAllClassByPage();
             this.$message({
               message: res.data,

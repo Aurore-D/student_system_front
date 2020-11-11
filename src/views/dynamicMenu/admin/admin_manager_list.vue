@@ -44,15 +44,22 @@
 
     <div style="margin-bottom:1% ">
       <!--主页面和查询功能-->
-      <el-input v-model="manager_list.manager_name" placeholder="请输入要查询的部门经理姓名" style="width: 17%"></el-input>
+      <el-input v-model="manager_list.manager_name" placeholder="请输入要查询的部门经理姓名" style="width: 20%"></el-input>
       <el-button @click="getAllManagerByPage">查询</el-button>
       <el-button @click="addManagerForm.dialogFormVisible = true">新增</el-button>
+      <el-button @click="batchdelete">删除</el-button>
     </div>
 
     <el-table
       :data="manager_list.tableData"
       border
-      style="width: 550px;margin-left:25%">
+      style="width: 550px;margin-left:25%"
+      @selection-change="handleSelectionChange">
+
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column
         fixed
         prop="manager_id"
@@ -105,7 +112,8 @@
           total: 0,
           page_size: 5,
           current_page: 1,
-          manager_name: ""
+          manager_name: "",
+          multipleSelection: []
         },
         //新增manager的数据
         addManagerForm: {
@@ -260,6 +268,30 @@
           }
         });
       },
+      handleSelectionChange(val) {
+        this.manager_list.multipleSelection = val;
+      },
+      batchdelete: function () {
+        this.$confirm('确定删除选中部门经理信息?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          /*axios({
+              method: 'post',
+              url: 'repassword',
+              data: this.multipleSelection
+          })*/
+          var data = this.manager_list.multipleSelection;
+          http.admin_manager_list.batchdelete(data).then(res => {
+            this.getAllManagerByPage();
+            this.$message({
+              message: res.data,
+              type: 'success'
+            });
+          })
+        });
+      }
 
     },
     //生命周期钩子
