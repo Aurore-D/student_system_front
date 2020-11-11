@@ -91,7 +91,7 @@ export function getEvaluationWithManagerByStudentId(studentId,periodNo) {
                                 evaluationFormDept: this.evaluateForm.evaluationFormDept
                             }
                         })*/
-export function evaluatingStudentWithManager(managerName, studentId, periodNo, overallScore, evaluationFormDept) {
+export function evaluatingStudentWithManager(managerName, studentId, periodNo, overallScore, evaluationFormDept,job) {
   return http(
     {
       url: '/evaluatingStudentWithManager',
@@ -101,12 +101,13 @@ export function evaluatingStudentWithManager(managerName, studentId, periodNo, o
         studentId: studentId,
         periodNo: periodNo,//转正
         overallScore: overallScore,
-        evaluationFormDept: evaluationFormDept
+        evaluationFormDept: evaluationFormDept,
+        job:job
       }
     }
   )
 }
-
+/*动态表头*/
 export function getStudentWithUserById(studentId) {
   return http(
     {
@@ -114,6 +115,18 @@ export function getStudentWithUserById(studentId) {
       method: 'get',
       params: {
         studentId: studentId,
+      }
+    }
+  )
+}
+/*动态表头*/
+export function getTableHeadOfScore() {
+  return http(
+    {
+      url: '/getTableHeadOfScore',
+      method: 'get',
+      params: {
+
       }
     }
   )

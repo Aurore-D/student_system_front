@@ -64,75 +64,20 @@
         <el-table-column
           fixed="right"
           label="操作"
-          align="center" width="150"
+          align="center" width="120"
         >
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="handleShow(scope.row)">查看</el-button>
-            <el-button type="text" size="small" @click="Scoring(scope.row)">打分</el-button>
-            <el-button type="text" size="small" @click="evaluate(scope.row)">评价</el-button>
+            <el-button type="text" size="small" @click="Scoring(scope.row)">评价</el-button>
           </template>
         </el-table-column>
       </el-table>
 
-      <!--弹窗打分,动态渲染表单-->
-      <el-dialog title="员工打分"
-                 :visible.sync="editFormVisible"
-                 :close-on-click-modal="false"
-                 center>
-        <el-form :model="editForm" ref="editForm" align="center" class="demo-ruleForm">
-          <el-form-item v-for="(item,index) in editForm.qualityScore" :key="index"
-                        :prop="'qualityScore.'+index+'.score'"
-                        :rules="[ { required: true, message: '分数不能为空',trigger: 'blur'},
-                          { type: 'number', message: '分数必须为数字值'},
-                          { pattern: /^([0-5]|5)$/,message: '分数范围在0-5'}]">
-            <span>{{tableColumnList[index].quality_name}}</span>
-            <el-input v-model="item.periodNo" readonly="" v-show="false"></el-input>
-            <el-input v-model="item.studentId" readonly="" v-show="false"></el-input>
-            <el-input v-model="item.qualityId" readonly="" v-show="false"></el-input>
-            <el-input v-model.number="item.score" auto-complete="off"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click.native="handleCancel">取消</el-button>
-          <el-button type="primary" @click.native="handleUpdate('editForm')">提交</el-button>
-        </div>
-      </el-dialog>
-
-      <!--弹窗评价-->
-      <el-dialog title="员工评价"
-                 :visible.sync="EvaluateVisible"
-                 :close-on-click-modal="false"
-                 center
-      >
-        <el-form :model="evaluateForm" :rules="rulesForEvaluate" ref="evaluateForm" align="center"
-                 class="demo-ruleForm">
-          <el-form-item>
-            <el-input v-model="evaluateForm.periodNo" readonly="" v-show="false"></el-input>
-          </el-form-item>
-          <el-form-item label="员工编号">
-            <el-input v-model="evaluateForm.studentId" readonly=""></el-input>
-          </el-form-item>
-          <el-form-item label="评价人">
-            <el-input v-model="evaluateForm.managerName" readonly=""></el-input>
-          </el-form-item>
-          <el-form-item label="整体评价分数" prop="overallScore">
-            <el-input v-model.number="evaluateForm.overallScore" placeholder="请输入0-5的评价分数"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-form-item label="评价（包括主要优点及缺陷）" prop="evaluationFormDept">
-              <el-input type="textarea" v-model="evaluateForm.evaluationFormDept"
-                        placeholder="请输入50字以内的评价信息"></el-input>
-            </el-form-item>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click.native="handleCancel">取消</el-button>
-          <el-button type="primary" @click.native="handleUpdateEvaluate('evaluateForm')">提交</el-button>
-        </div>
-      </el-dialog>
-
       <!--查看信息-->
-      <Student_Info_View v-if="showDialogVisible" ref="student_Info_View"></Student_Info_View>
+      <Student_Info_View v-if="showDialogVisible"
+                         :student_id="studentId" ref="student_Info_View"></Student_Info_View>
+      <!--编辑评价-->
+      <Student_Info_View_Edit v-if="editFormVisible" @getAllStu="getAllStu" :student_id="studentId" :period_no ="periodNo" ref="student_Info_View_Edit"></Student_Info_View_Edit>
 
     </div>
     <div class="block">
@@ -156,16 +101,18 @@
     import axios from 'axios';
     import http from '@/http/http.js'
     import Student_Info_View from "../../home/Student_Info_View";
+    import Student_Info_View_Edit from "../../home/Student_Info_View_Edit";
 
     export default {
         name: "student_info_m",
-        components:{
-            Student_Info_View
+        components: {
+            Student_Info_View,
+            Student_Info_View_Edit
         },
         data() {
             return {
-                studentId:'',
-                periodNo: 1,
+                studentId: '',
+                periodNo:1,
                 tableData: [],
                 tableColumnList: [],//动态表头
                 studentData: [],
@@ -181,18 +128,6 @@
                 editFormVisible: false,
                 EvaluateVisible: false,
                 showDialogVisible: false,
-                //表单验证
-                rulesForEvaluate: {
-                    overallScore: [
-                        {required: true, message: '分数不能为空', trigger: 'blur'},
-                        {type: 'number', message: '分数必须为数字值'},
-                        {pattern: /^([0-5]|5)$/, message: '分数范围在0-5',}
-                    ],
-                    evaluationFormDept: [
-                        {required: true, message: '请输入评价', trigger: 'blur'},
-                        {min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur'}
-                    ]
-                }
             }
         },
         methods: {
@@ -233,111 +168,22 @@
             /*主页面打分按钮操作*/
             Scoring: function (student) {
                 this.editFormVisible = true;//dialog对话窗口打开
-                /*axios.get("getScoreByStudentIdWithManager", {
-                    params: {
-                        studentId: student.student_id,
-                        periodNo: 1  //转正时期分数
-                    }
-                })*/
-                var studentId = student.student_id,
-                    periodNo = this.periodNo; //转正时期分数;
-                http.manager.getScoreByStudentIdWithManager(studentId, periodNo).then(res => {
-                    this.editForm.qualityScore = res.data.qualityScoreWithStudent;
-                })
-            },
-            /*弹窗取消按钮操作*/
-            handleCancel: function () {
-                this.editFormVisible = false;
-                this.EvaluateVisible = false;
-            },
-            /*更新品质分数*/
-            handleUpdate: function (editForm) {
-                this.$refs[editForm].validate((valid) => {
-                    if (valid) {
-                        /*axios({
-                            method: 'post',
-                            url: 'updateStuScoreWithManager',
-                            data: this.editForm
-                        })*/
-                        var data = this.editForm.qualityScore;
-                        http.manager.updateStuScoreWithManager(data).then(res => {
-                            if ("success" == res.data) {
-                                this.$message({
-                                    message: '提交成功！',
-                                    type: 'success'
-                                });
-                                this.getAllStu();
-                                this.editFormVisible = false;
-                            } else {
-                                this.$message.error('提交失败！');
-                            }
-                        })
-                    } else {
-                        return false;
-                    }
+                this.studentId = student.student_id;
+                this.$nextTick(() => {
+                    this.$refs.student_Info_View_Edit.handleShow()
                 });
-            },
-            /*主页面评价按钮操作*/
-            evaluate: function (student) {
-                this.EvaluateVisible = true;
-                /*axios.get("getEvaluationWithManagerByStudentId", {
-                    params: {
-                        studentId: student.student_id,
-                        periodNo: 1//转正
-                    }
-                })*/
-                var studentId = student.student_id,
-                    periodNo = this.periodNo; //转正
-                http.manager.getEvaluationWithManagerByStudentId(studentId, periodNo).then(res => {
-                    this.evaluateForm = res.data
-                })
-            },
-            /*评价提交按钮操作*/
-            handleUpdateEvaluate: function (formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
 
-                        /*axios.get("evaluatingStudentWithManager", {
-                            params: {
-                                managerName: "刘表",
-                                studentId: this.evaluateForm.studentId,
-                                periodNo: 1,//转正
-                                overallScore: this.evaluateForm.overallScore,
-                                evaluationFormDept: this.evaluateForm.evaluationFormDept
-                            }
-                        })*/
-                        var managerName = this.$store.state.user.userName,
-                            studentId = this.evaluateForm.studentId,
-                            periodNo = this.periodNo,//转正
-                            overallScore = this.evaluateForm.overallScore,
-                            evaluationFormDept = this.evaluateForm.evaluationFormDept
-                        http.manager.evaluatingStudentWithManager(managerName, studentId, periodNo, overallScore, evaluationFormDept).then(res => {
-                            if ("success" == res.data) {
-                                this.$message({
-                                    message: '提交成功！',
-                                    type: 'success'
-                                });
-                                this.getAllStu();
-                                this.EvaluateVisible = false;
-                            } else {
-                                this.$message.error('提交失败！');
-                            }
-                        })
-                    } else {
-                        return false;
-                    }
-                });
+
             },
+
             //查看信息
             handleShow: function (student) {
                 this.showDialogVisible = true;
                 this.studentId = student.student_id;
+
                 this.$nextTick(() => {
                     this.$refs.student_Info_View.handleShow()
                 })
-            },
-            getImgPathForShow() {
-                return require('@/assets/' + this.studentData.img_path);
             },
         },
         //生命周期钩子
@@ -363,7 +209,7 @@
     display: block;
   }
 
-   .table tr th, .table tr td {
+  .table tr th, .table tr td {
     border: 1px solid;
   }
 
@@ -372,7 +218,7 @@
     height: 40px;
   }
 
- .table {
+  .table {
     width: 100%;
     border: 2px solid;
     border-collapse: collapse

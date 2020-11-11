@@ -299,62 +299,66 @@
 
           </el-dialog>
 
-          <el-dialog title="学生信息查看" :visible.sync="showDialogVisible" width="70%">
-            <div id="showdiv">
-              <table id="table">
-                <tr>
-                  <td>姓名</td>
-                  <td>{{tablestudent_name}}</td>
-                  <td>学号</td>
-                  <td>{{tablestudent_id}}</td>
-                  <td>性别</td>
-                  <td>{{tablesex}}</td>
-                  <td rowspan="3" colspan="1">
-                    <div style="margin-top: -2%;margin-left: 9%">
-                      <img v-if="tableimg_path" :src="require('@/assets/' + this.tableimg_path)" class="avatar">
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>出生日期</td>
-                  <td>{{tablebirthday}}</td>
-                  <td>籍贯</td>
-                  <td>{{tablenative_place}}</td>
-                  <td>民族</td>
-                  <td>{{tablefolk}}</td>
-                </tr>
+          <!-- <el-dialog title="学生信息查看" :visible.sync="showDialogVisible" width="70%">
+             <div id="showdiv">
+               <table id="table">
+                 <tr>
+                   <td>姓名</td>
+                   <td>{{tablestudent_name}}</td>
+                   <td>学号</td>
+                   <td>{{tablestudent_id}}</td>
+                   <td>性别</td>
+                   <td>{{tablesex}}</td>
+                   <td rowspan="3" colspan="1">
+                     <div style="margin-top: -2%;margin-left: 9%">
+                       <img v-if="tableimg_path" :src="require('@/assets/' + this.tableimg_path)" class="avatar">
+                     </div>
+                   </td>
+                 </tr>
+                 <tr>
+                   <td>出生日期</td>
+                   <td>{{tablebirthday}}</td>
+                   <td>籍贯</td>
+                   <td>{{tablenative_place}}</td>
+                   <td>民族</td>
+                   <td>{{tablefolk}}</td>
+                 </tr>
 
-                <tr>
-                  <td>毕业院校</td>
-                  <td>{{tablegraduate_school}}</td>
-                  <td>专业</td>
-                  <td>{{tablemajor}}</td>
-                  <td>婚否</td>
-                  <td>{{tablemarital_status}}</td>
-                </tr>
+                 <tr>
+                   <td>毕业院校</td>
+                   <td>{{tablegraduate_school}}</td>
+                   <td>专业</td>
+                   <td>{{tablemajor}}</td>
+                   <td>婚否</td>
+                   <td>{{tablemarital_status}}</td>
+                 </tr>
 
-                <tr>
-                  <td>身份证号</td>
-                  <td colspan="3">{{tableid_number}}</td>
-                  <td>手机号码</td>
-                  <td colspan="3">{{tablephone}}</td>
-                </tr>
+                 <tr>
+                   <td>身份证号</td>
+                   <td colspan="3">{{tableid_number}}</td>
+                   <td>手机号码</td>
+                   <td colspan="3">{{tablephone}}</td>
+                 </tr>
 
-                <tr>
-                  <td>备注</td>
-                  <td colspan="8">{{tableremark}}</td>
-                </tr>
-                <tr>
-                  <td>班期</td>
-                  <td colspan="8">{{tableclass_no}}</td>
-                </tr>
-                <tr>
-                  <td>部门</td>
-                  <td colspan="8">{{tabledept_name}}</td>
-                </tr>
-              </table>
-            </div>
-          </el-dialog>
+                 <tr>
+                   <td>备注</td>
+                   <td colspan="8">{{tableremark}}</td>
+                 </tr>
+                 <tr>
+                   <td>班期</td>
+                   <td colspan="8">{{tableclass_no}}</td>
+                 </tr>
+                 <tr>
+                   <td>部门</td>
+                   <td colspan="8">{{tabledept_name}}</td>
+                 </tr>
+               </table>
+             </div>
+           </el-dialog>-->
+          <!--查看信息-->
+          <Student_Info_View v-if="showDialogVisible"
+                             :student_id="studentId" ref="student_Info_View"></Student_Info_View>
+
 
           <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt" align="center">
@@ -468,12 +472,16 @@
 <script>
     import http from '@/http/http.js'
     import {getToken} from '@/http/auth.js'
+    import Student_Info_View from "../../../home/Student_Info_View";
 
     export default {
         name: "student_info_a",
+        components: {
+            Student_Info_View
+        },
         data() {
             return {
-
+                studentId: '',
                 student_name: "",
                 class_no: "",
                 pageSize: 5,
@@ -830,21 +838,12 @@
 
             handleShow(index, row) {
                 this.showDialogVisible = true;
-                this.tablestudent_name = row.student_name;
-                this.tablestudent_id = row.student_id;
-                this.tablesex = row.sex;
-                this.tablebirthday = row.birthday;
-                this.tablefolk = row.folk;
-                this.tablenative_place = row.native_place;
-                this.tableid_number = row.id_number;
-                this.tablemarital_status = row.marital_status;
-                this.tablegraduate_school = row.graduate_school;
-                this.tablephone = row.phone;
-                this.tablemajor = row.major;
-                this.tableremark = row.remark;
-                this.tableclass_no = row.class_no;
-                this.tabledept_name = row.dept_name;
-                this.tableimg_path = row.img_path;
+                this.studentId = row.student_id;
+
+                this.$nextTick(() => {
+                    this.$refs.student_Info_View.handleShow()
+                })
+
 
             },
 
@@ -1030,7 +1029,7 @@
   }
 
   #table, #table tr th, #table tr td {
-    border: 1px solid ;
+    border: 1px solid;
   }
 
   #table {
