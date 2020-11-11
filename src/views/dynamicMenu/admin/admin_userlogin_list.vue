@@ -17,7 +17,7 @@
       <el-table-column
         prop="userId"
         label="用户编号"
-        width="150" sortable align="right">
+        width="150" sortable align="center">
       </el-table-column>
       <el-table-column
         prop="userName"
@@ -27,6 +27,7 @@
       <el-table-column
         prop="password"
         label="密码"
+        align="center"
         show-overflow-tooltip>
       </el-table-column>
     </el-table>
