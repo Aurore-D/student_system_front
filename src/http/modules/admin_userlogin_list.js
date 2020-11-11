@@ -27,6 +27,19 @@ export function repassword(data) {
   )
 }
 
+export function getAllUserloginByPage(pageSize,currentPage) {
+  return http(
+    {
+      url: '/getAllUserloginByPage',
+      method: 'get',
+      params:{
+        pageSize: pageSize,
+        currentPage: currentPage
+      }
+    }
+  )
+}
+
 
 
 
