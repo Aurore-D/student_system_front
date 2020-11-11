@@ -3,7 +3,7 @@
     <!--添加class的表单-->
     <el-dialog title="添加班期信息" :visible.sync="addClassForm.dialogFormVisible" width="30%">
       <el-form :model="addClassForm" label-width="80px" :rules="rules" ref="addClassForm" class="demo-ruleForm">
-        <el-form-item  label-width="100px" label="教师工号:" prop="teacher_id">
+        <el-form-item label-width="100px" label="教师工号:" prop="teacher_id">
           <el-select v-model="addClassForm.teacher_id" placeholder="请选择教师">
             <el-option v-for="i in (addClassForm.teacher.length)" :key="i" v-model:label="addClassForm.teacher[i-1]"
                        v-model:value="addClassForm.teacher[i-1]"></el-option>
@@ -38,8 +38,8 @@
 
     <!--主页面-->
     <div style="margin-left: 18%;margin-bottom:1% ">
-      <el-button @click="addClassForm.dialogFormVisible = true">新增</el-button>
-      <el-button @click="batchdelete">删除</el-button>
+      <el-button type="primary" @click="addClassForm.dialogFormVisible = true">新增</el-button>
+      <el-button type="danger" @click="batchdelete">删除</el-button>
     </div>
     <el-table
       :data="class_list.tableData"
@@ -49,7 +49,7 @@
 
       <el-table-column
         type="selection"
-        width="55" >
+        width="55">
       </el-table-column>
       <el-table-column
         prop="class_no" align="center"
@@ -62,10 +62,10 @@
       >
       </el-table-column>
       <el-table-column
-        label="操作" align="center" width="120">
+        label="操作" align="center" width="130">
         <template slot-scope="scope">
-          <el-button @click="getClassById(scope.row)" type="text" size="small">编辑</el-button>
-          <el-button type="text" size="small" @click="deleteClass(scope.row)">删除</el-button>
+          <el-button @click="getClassById(scope.row)" type="primary" icon="el-icon-edit" size="small"></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="small" @click="deleteClass(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -237,25 +237,32 @@
         this.class_list.multipleSelection = val;
       },
       batchdelete: function () {
-        this.$confirm('确定删除选中班期信息?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          /*axios({
+        if (this.class_list.multipleSelection.length > 0) {
+          this.$confirm('确定删除选中班期信息?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            /*axios({
               method: 'post',
               url: 'repassword',
               data: this.multipleSelection
           })*/
-          var data = this.class_list.multipleSelection;
-          http.admin_class_list.batchdelete(data).then(res => {
-            this.getAllClassByPage();
-            this.$message({
-              message: res.data,
-              type: 'success'
-            });
+            var data = this.class_list.multipleSelection;
+            http.admin_class_list.batchdelete(data).then(res => {
+              this.getAllClassByPage();
+              this.$message({
+                message: res.data,
+                type: 'success'
+              });
+            })
+          });
+        }else {
+          this.$message({
+            message: "请至少选择一条数据",
+            type: 'warning'
           })
-        });
+        }
       },
 
     },

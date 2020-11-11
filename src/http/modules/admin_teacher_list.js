@@ -109,4 +109,15 @@ export function updateTeacherById(teacherId,teacherName) {
   )
 }
 
+export function batchdelete(teachers) {
+  return http(
+    {
+      url: '/batchdeleteTeacher',
+      method: 'post',
+      params: {},
+      data: teachers
+    }
+  )
+}
+
 

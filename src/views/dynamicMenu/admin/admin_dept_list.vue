@@ -34,13 +34,19 @@
     <div style="margin-bottom:1% ">
       <!--主页面和查询功能-->
       <el-input v-model="dept_list.dept_name" placeholder="请输入要查询的部门名称" style="width: 17%"></el-input>
-      <el-button @click="getAllDeptByPage">查询</el-button>
-      <el-button @click="addDeptForm.dialogFormVisible = true">新增</el-button>
+      <el-button type="primary" @click="getAllDeptByPage">查询</el-button>
+      <el-button type="primary" @click="addDeptForm.dialogFormVisible = true">新增</el-button>
+      <el-button type="danger" @click="batchdelete">删除</el-button>
     </div>
     <el-table
       :data="dept_list.tableData"
       border
-      style="width: 500px;margin-left:25%">
+      style="width: 500px;margin-left:25%"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column
         fixed
         prop="deptNo"
@@ -53,11 +59,11 @@
       >
       </el-table-column>
       <el-table-column
-        label="操作" align="center" width="120"
+        label="操作" align="center" width="130"
       >
         <template slot-scope="scope">
-          <el-button @click="getDeptById(scope.row)" type="text" size="small">编辑</el-button>
-          <el-button type="text" size="small" @click="deleteDept(scope.row)">删除</el-button>
+          <el-button @click="getDeptById(scope.row)" type="primary" icon="el-icon-edit" size="small"></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="small" @click="deleteDept(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -88,7 +94,8 @@
           total: 0,
           page_size: 5,
           current_page: 1,
-          dept_name: ""
+          dept_name: "",
+          multipleSelection: []
         },
         //新增manager的数据
         addDeptForm: {
@@ -234,6 +241,44 @@
           }
         });
       },
+    handleSelectionChange(val) {
+      this.dept_list.multipleSelection = val;
+    },
+    batchdelete: function () {
+      if (this.dept_list.multipleSelection.length > 0) {
+        this.$confirm('确定删除选中部门信息?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          /*axios({
+            method: 'post',
+            url: 'repassword',
+            data: this.multipleSelection
+        })*/
+          var data = this.dept_list.multipleSelection;
+          http.admin_dept_list.batchdelete(data).then(res => {
+            this.getAllDeptByPage();
+            if (res.data == "success") {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+            } else {
+              this.$message({
+                message: res.data,
+                type: 'error'
+              });
+            }
+          })
+        });
+      }else {
+        this.$message({
+          message: "请至少选择一条数据",
+          type: 'warning'
+        })
+      }
+    },
 
     },
     //生命周期钩子

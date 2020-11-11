@@ -111,5 +111,15 @@ export function updateDeptById(deptNo,deptName) {
   )
 }
 
+export function batchdelete(depts) {
+  return http(
+    {
+      url: '/batchdeleteDept',
+      method: 'post',
+      params: {},
+      data: depts
+    }
+  )
+}
 
 

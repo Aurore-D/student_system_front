@@ -33,13 +33,19 @@
     <div style="margin-bottom:1% ">
       <!--主页面和查询功能-->
       <el-input v-model="teacher_list.teacher_name" placeholder="请输入要查询的教师姓名" style="width: 17%"></el-input>
-      <el-button @click="getAllTeacherByPage">查询</el-button>
-      <el-button @click="addTeacherForm.dialogFormVisible = true">新增</el-button>
+      <el-button type="primary" @click="getAllTeacherByPage">查询</el-button>
+      <el-button type="primary" @click="addTeacherForm.dialogFormVisible = true">新增</el-button>
+      <el-button type="danger" @click="batchdelete">删除</el-button>
     </div>
     <el-table
       :data="teacher_list.tableData"
       border
-      style="width: 500px;margin-left:25%">
+      style="width: 500px;margin-left:25%"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column
         fixed
         prop="teacherId"
@@ -54,10 +60,10 @@
       </el-table-column>
       <el-table-column
         label="操作" align="center"
-        width="120">
+        width="130">
         <template slot-scope="scope">
-          <el-button @click="getTeacherById(scope.row)" type="text" size="small">编辑</el-button>
-          <el-button type="text" size="small" @click="deleteTeacher(scope.row)">删除</el-button>
+          <el-button @click="getTeacherById(scope.row)" type="primary" icon="el-icon-edit" size="small"></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="small" @click="deleteTeacher(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,7 +93,8 @@
           total: 0,
           page_size: 5,
           current_page: 1,
-          teacher_name: ""
+          teacher_name: "",
+          multipleSelection: []
         },
         //新增manager的数据
         addTeacherForm: {
@@ -231,6 +238,44 @@
             return false;
           }
         });
+      },
+      handleSelectionChange(val) {
+        this.teacher_list.multipleSelection = val;
+      },
+      batchdelete: function () {
+        if (this.teacher_list.multipleSelection.length > 0) {
+          this.$confirm('确定删除选中教师信息?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            /*axios({
+              method: 'post',
+              url: 'repassword',
+              data: this.multipleSelection
+          })*/
+            var data = this.teacher_list.multipleSelection;
+            http.admin_teacher_list.batchdelete(data).then(res => {
+              this.getAllTeacherByPage();
+              if (res.data == "success") {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+              } else {
+                this.$message({
+                  message: res.data,
+                  type: 'error'
+                });
+              }
+            })
+          });
+        }else {
+          this.$message({
+            message: "请至少选择一条数据",
+            type: 'warning'
+          })
+        }
       },
 
     },

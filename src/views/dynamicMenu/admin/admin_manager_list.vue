@@ -45,9 +45,9 @@
     <div style="margin-bottom:1% ">
       <!--主页面和查询功能-->
       <el-input v-model="manager_list.manager_name" placeholder="请输入要查询的部门经理姓名" style="width: 20%"></el-input>
-      <el-button @click="getAllManagerByPage">查询</el-button>
-      <el-button @click="addManagerForm.dialogFormVisible = true">新增</el-button>
-      <el-button @click="batchdelete">删除</el-button>
+      <el-button type="primary" @click="getAllManagerByPage">查询</el-button>
+      <el-button type="primary" @click="addManagerForm.dialogFormVisible = true">新增</el-button>
+      <el-button type="danger" @click="batchdelete">删除</el-button>
     </div>
 
     <el-table
@@ -78,11 +78,13 @@
       >
       </el-table-column>
       <el-table-column
-        label="操作" width="120"
+        align="center"
+        label="操作"
+        width="130"
       >
         <template slot-scope="scope">
-          <el-button @click="getManagerById(scope.row)" type="text" size="small">编辑</el-button>
-          <el-button type="text" size="small" @click="deleteManager(scope.row)">删除</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="getManagerById(scope.row)" size="small"></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="small" @click="deleteManager(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -272,25 +274,32 @@
         this.manager_list.multipleSelection = val;
       },
       batchdelete: function () {
-        this.$confirm('确定删除选中部门经理信息?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          /*axios({
-              method: 'post',
-              url: 'repassword',
-              data: this.multipleSelection
-          })*/
-          var data = this.manager_list.multipleSelection;
-          http.admin_manager_list.batchdelete(data).then(res => {
-            this.getAllManagerByPage();
-            this.$message({
-              message: res.data,
-              type: 'success'
-            });
+        if (this.manager_list.multipleSelection.length > 0) {
+          this.$confirm('确定删除选中部门经理信息?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            /*axios({
+                method: 'post',
+                url: 'repassword',
+                data: this.multipleSelection
+            })*/
+            var data = this.manager_list.multipleSelection;
+            http.admin_manager_list.batchdelete(data).then(res => {
+              this.getAllManagerByPage();
+              this.$message({
+                message: res.data,
+                type: 'success'
+              });
+            })
+          });
+        } else {
+          this.$message({
+            message: "请至少选择一条数据",
+            type: 'warning'
           })
-        });
+        }
       }
 
     },
