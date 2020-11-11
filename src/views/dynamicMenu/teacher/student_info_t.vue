@@ -62,11 +62,10 @@
         <el-table-column
           fixed="right"
           label="操作"
-          align="center" width="150">
+          align="center" width="130">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleShow(scope.row)">查看</el-button>
-            <el-button type="text" size="small" @click="Scoring(scope.row)">评价</el-button>
-
+            <el-button size="mini" @click="handleShow(scope.row)"><i class="el-icon-view"></i></el-button>
+            <el-button type="primary" size="mini" @click="Scoring(scope.row)"><i class="el-icon-edit"></i></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -75,7 +74,8 @@
       <Student_Info_View v-if="showDialogVisible"
                          :student_id="studentId" ref="student_Info_View"></Student_Info_View>
       <!--编辑评价-->
-      <Student_Info_View_Edit v-if="editFormVisible" @getAllStu="getAllStu" :student_id="studentId" :period_no ="periodNo" ref="student_Info_View_Edit"></Student_Info_View_Edit>
+      <Student_Info_View_Edit v-if="editFormVisible" @getAllStu="getAllStu" :student_id="studentId"
+                              :period_no="periodNo" ref="student_Info_View_Edit"></Student_Info_View_Edit>
 
     </div>
     <div class="block">
@@ -110,7 +110,7 @@
         data() {
             return {
 
-                periodNo:0,
+                periodNo: 0,
                 studentId: '',
                 tableData: [],
                 tableColumnList: [],//动态表头

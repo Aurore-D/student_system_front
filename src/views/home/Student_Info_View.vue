@@ -1,6 +1,6 @@
 <template>
   <!--查看信息-->
-  <el-dialog title="员工信息查看" :visible.sync="showDialogVisible" width="80%" :close-on-click-modal="false">
+  <el-dialog title="个人信息页" :visible.sync="showDialogVisible" width="80%" :close-on-click-modal="false">
     <div id="showdiv">
 
 

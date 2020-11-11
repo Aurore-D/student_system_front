@@ -64,11 +64,12 @@
         <el-table-column
           fixed="right"
           label="操作"
-          align="center" width="120"
+          align="center" width="130"
         >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleShow(scope.row)">查看</el-button>
-            <el-button type="text" size="small" @click="Scoring(scope.row)">评价</el-button>
+
+            <el-button  size="mini" @click="handleShow(scope.row)"><i class="el-icon-view"></i></el-button>
+            <el-button type="primary" size="mini" @click="Scoring(scope.row)"><i class="el-icon-edit"></i></el-button>
           </template>
         </el-table-column>
       </el-table>
